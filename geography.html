@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hattie's Geography Revision 🌍</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Nunito+Sans:wght@400;600&display=swap');
+  :root{--bg:#0d1a2a;--card:#162338;--card2:#1b2d47;--accent:#38bdf8;--accent2:#fb923c;--accent3:#a78bfa;--text:#e8f4ff;--muted:#6a90b5;--radius:18px;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:18px;line-height:1.6;}
+  .header{background:linear-gradient(135deg,#0a1220 0%,#0d2340 100%);padding:20px 20px 16px;text-align:center;border-bottom:3px solid var(--accent);position:sticky;top:0;z-index:10;}
+  .header h1{font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:900;color:var(--accent);}
+  .header p{font-size:0.85rem;color:var(--muted);margin-top:2px;}
+  #topic-screen{padding:20px 16px 40px;}
+  .section-label{font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;padding-left:4px;}
+  .topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .topic-btn{background:var(--card);border:2px solid transparent;border-radius:var(--radius);padding:18px 14px;cursor:pointer;text-align:center;transition:all 0.2s;}
+  .topic-btn:active{transform:scale(0.97);}
+  .topic-btn .icon{font-size:2rem;margin-bottom:8px;display:block;}
+  .topic-btn .name{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:var(--text);line-height:1.3;}
+  .topic-btn .sub{font-size:0.72rem;color:var(--muted);margin-top:4px;}
+  .topic-btn[data-color="blue"]{border-color:#38bdf833;} .topic-btn[data-color="blue"]:hover{border-color:var(--accent);background:#38bdf818;}
+  .topic-btn[data-color="orange"]{border-color:#fb923c33;} .topic-btn[data-color="orange"]:hover{border-color:var(--accent2);background:#fb923c18;}
+  .topic-btn[data-color="purple"]{border-color:#a78bfa33;} .topic-btn[data-color="purple"]:hover{border-color:var(--accent3);background:#a78bfa18;}
+  .topic-btn[data-color="green"]{border-color:#4ade8033;} .topic-btn[data-color="green"]:hover{border-color:var(--green);background:#4ade8018;}
+  .topic-btn[data-color="yellow"]{border-color:#fbbf2433;} .topic-btn[data-color="yellow"]:hover{border-color:var(--yellow);background:#fbbf2418;}
+  .topic-btn[data-color="red"]{border-color:#f8717133;} .topic-btn[data-color="red"]:hover{border-color:var(--red);background:#f8717118;}
+  #game-screen{display:none;}
+  .game-header{background:var(--card);padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #ffffff10;}
+  .back-btn{background:none;border:2px solid var(--muted);border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .game-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;flex:1;}
+  .score-badge{background:var(--accent);color:#0d1a2a;font-family:'Nunito',sans-serif;font-weight:900;font-size:0.85rem;padding:4px 12px;border-radius:20px;flex-shrink:0;}
+  .streak-bar{background:var(--card);padding:8px 20px;border-bottom:1px solid #ffffff08;display:flex;align-items:center;gap:10px;}
+  .streak-label{font-size:0.75rem;color:var(--muted);font-weight:700;flex-shrink:0;}
+  .streak-dots{display:flex;gap:5px;flex:1;}
+  .streak-dot{width:14px;height:14px;border-radius:50%;background:#ffffff15;transition:all 0.3s;flex-shrink:0;}
+  .streak-dot.hit{background:var(--green);} .streak-dot.miss{background:var(--red);}
+  .finish-btn-small{background:none;border:1.5px solid var(--muted);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:800;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;}
+  .finish-btn-small:hover{border-color:var(--accent);color:var(--accent);}
+  .q-area{padding:20px 20px 0;}
+  .q-number{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .q-box{background:var(--card);border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;min-height:90px;display:flex;align-items:center;border:2px solid #ffffff08;}
+  .q-text{font-family:'Nunito',sans-serif;font-weight:700;font-size:1.1rem;line-height:1.5;color:var(--text);}
+  .loading-dots{display:flex;gap:6px;align-items:center;}
+  .loading-dots span{width:10px;height:10px;background:var(--accent);border-radius:50%;animation:bounce 1.2s infinite;}
+  .loading-dots span:nth-child(2){animation-delay:0.2s;background:var(--accent2);}
+  .loading-dots span:nth-child(3){animation-delay:0.4s;background:var(--accent3);}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4;}40%{transform:translateY(-10px);opacity:1;}}
+  .options-grid{display:flex;flex-direction:column;gap:10px;padding:0 20px 20px;}
+  .option-btn{background:var(--card2);border:2.5px solid #ffffff12;border-radius:var(--radius);padding:16px 18px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;color:var(--text);transition:all 0.15s;display:flex;align-items:center;gap:14px;line-height:1.4;}
+  .option-btn:hover:not(:disabled){border-color:var(--accent);background:#38bdf812;}
+  .option-btn .opt-letter{width:32px;height:32px;border-radius:50%;background:#ffffff12;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;font-weight:900;}
+  .option-btn.correct{border-color:var(--green);background:#4ade8018;} .option-btn.correct .opt-letter{background:var(--green);color:#0d1a2a;}
+  .option-btn.wrong{border-color:var(--red);background:#f8717118;} .option-btn.wrong .opt-letter{background:var(--red);color:#0d1a2a;}
+  .option-btn:disabled{cursor:default;}
+  .feedback-box{margin:0 20px 20px;padding:16px 18px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;line-height:1.5;display:none;}
+  .feedback-box.correct{background:#4ade8018;border:2px solid var(--green);color:#a7f3d0;}
+  .feedback-box.wrong{background:#f8717118;border:2px solid var(--red);color:#fca5a5;}
+  .feedback-emoji{font-size:1.4rem;margin-bottom:6px;display:block;}
+  .feedback-explain{color:var(--text);margin-top:8px;font-weight:600;font-size:0.9rem;}
+  .next-btn{display:none;margin:0 20px 30px;width:calc(100% - 40px);padding:18px;background:var(--accent);color:#0d1a2a;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;}
+  #end-screen{display:none;padding:40px 20px;text-align:center;}
+  .end-emoji{font-size:4rem;margin-bottom:16px;}
+  .end-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:var(--accent);margin-bottom:8px;}
+  .end-score{font-family:'Nunito',sans-serif;font-weight:800;font-size:3rem;margin:20px 0;color:var(--text);}
+  .end-score span{color:var(--muted);font-size:1.5rem;}
+  .end-msg{color:var(--muted);font-size:0.95rem;margin-bottom:30px;line-height:1.6;}
+  .retry-btn{display:block;width:100%;padding:18px;background:var(--accent);color:#0d1a2a;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;margin-bottom:12px;}
+  .menu-btn{display:block;width:100%;padding:18px;background:var(--card);color:var(--text);border:2px solid #ffffff20;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;}
+  .stars{color:var(--yellow);font-size:1.5rem;}
+  .error-box{margin:0 20px 20px;padding:16px;background:#fb923c18;border:2px solid var(--accent2);border-radius:var(--radius);color:#fdba74;font-size:0.9rem;display:none;}
+  .urgent-badge{display:inline-block;background:#ef444420;border:1px solid #ef4444;color:#f87171;font-size:0.65rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-top:5px;}
+</style>
+</head>
+<body>
+<div class="header"><h1>🌍 Geography Revision</h1><p>Hattie's Year 8 · Exam Thursday 21st May</p></div>
+<div id="topic-screen">
+  <div style="padding:20px 16px 10px;">
+    <div class="section-label">Choose a topic</div>
+    <div class="topic-grid">
+      <button class="topic-btn" data-color="blue" onclick="startGame('mapskills')"><span class="icon">🗺️</span><div class="name">Map Skills</div><div class="sub">Continents, oceans, compass, lat/long, scale</div></button>
+      <button class="topic-btn" data-color="orange" onclick="startGame('gridrefs')"><span class="icon">📍</span><div class="name">Grid References & Relief</div><div class="sub">4 & 6 figure grid refs, contours, spot heights</div></button>
+      <button class="topic-btn" data-color="green" onclick="startGame('economic')"><span class="icon">🏭</span><div class="name">Economic Activity</div><div class="sub">Primary, secondary, tertiary, quaternary; farming</div></button>
+      <button class="topic-btn" data-color="yellow" onclick="startGame('atmosphere')"><span class="icon">🌡️</span><div class="name">Atmospheric Circulation & Biomes</div><div class="sub">Global circulation, deserts, cold environments</div></button>
+      <button class="topic-btn" data-color="purple" onclick="startGame('amazon')"><span class="icon">🌿</span><div class="name">Amazon Rainforest</div><div class="sub">Location, climate, structure, adaptations, threats</div></button>
+      <button class="topic-btn" data-color="red" onclick="startGame('tectonics')"><span class="icon">🌋</span><div class="name">Tectonic Activity</div><div class="sub">Volcanoes, earthquakes, effects, mitigation</div></button>
+    </div>
+    <div style="padding:14px 16px;background:var(--card);border-radius:14px;font-size:0.82rem;color:var(--muted);line-height:1.6;">⚡ <strong style="color:#f87171">Exam is Thursday!</strong> Focus on topics you're least sure about first.</div>
+  </div>
+</div>
+<div id="game-screen">
+  <div class="game-header"><button class="back-btn" onclick="goHome()">←</button><div class="game-title" id="game-title">Topic</div><div class="score-badge" id="score-badge">0 / 0</div></div>
+  <div class="streak-bar"><div class="streak-label">Last 10:</div><div class="streak-dots" id="streak-dots"></div><button class="finish-btn-small" onclick="showEnd()">Finish ✓</button></div>
+  <div class="q-area"><div class="q-number" id="q-number">Question 1</div><div class="q-box" id="q-box"><div class="loading-dots"><span></span><span></span><span></span></div></div></div>
+  <div class="options-grid" id="options-grid"></div>
+  <div class="feedback-box" id="feedback-box"></div>
+  <div class="error-box" id="error-box">Couldn't load — tap Next to try again.</div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next question →</button>
+</div>
+<div id="end-screen">
+  <div class="end-emoji" id="end-emoji">🎉</div><div class="end-title" id="end-title">Session done!</div><div class="stars" id="end-stars">⭐⭐⭐</div>
+  <div class="end-score"><span id="final-score">0</span><span>/ <span id="final-total">0</span></span></div><div class="end-msg" id="end-msg"></div>
+  <button class="retry-btn" onclick="retryGame()">Same topic again 🔄</button><button class="menu-btn" onclick="goHome()">← Choose another topic</button>
+</div>
+<script>
+const PROXY='https://bert-api-proxy.super-night-6aa0.workers.dev';
+const TOPICS={
+  mapskills:{name:"Map Skills",context:`Year 8 Geography - Map Skills exam topic:
+WORLD MAP - 7 continents: North America, South America, Europe, Africa, Asia, Oceania/Australasia, Antarctica. 5 oceans: Pacific (largest), Atlantic, Indian, Southern, Arctic.
+COMPASS DIRECTIONS: 8 points - N, NE, E, SE, S, SW, W, NW. Bearing = 3-digit number clockwise from North (North=000°, East=090°, South=180°, West=270°).
+LATITUDE: Horizontal lines. 0°=Equator. Goes 0-90° North and South. Tropic of Cancer=23.5°N. Tropic of Capricorn=23.5°S. Arctic Circle=66.5°N. Antarctic Circle=66.5°S.
+LONGITUDE: Vertical lines. 0°=Prime Meridian (Greenwich). Goes 0-180° East and West.
+COORDINATES: Always Latitude first then Longitude (think "along the corridor then up the stairs" but for lat/long it's lat first). London = 51°N, 0°. New York ≈ 41°N, 74°W.
+SCALE: Representative fraction e.g. 1:50,000 means 1cm on map = 50,000cm (500m) in real life. Use ruler to measure, then multiply by scale denominator.
+DISTANCE: Measure with ruler (straight line) or string (curved route). Convert using scale.
+TIME ZONES: Earth divided into 24 time zones. Each 15° longitude = 1 hour difference. Moving East = time ahead. Moving West = time behind.`},
+  gridrefs:{name:"Grid References & Relief",context:`Year 8 Geography - Grid References and Relief exam topic:
+4-FIGURE GRID REFERENCES: Read eastings (across/horizontal) first, then northings (up/vertical). "Along the corridor, up the stairs." E.g. grid square 2134 = easting 21, northing 34. Gives a whole grid square.
+6-FIGURE GRID REFERENCES: More precise. Divide each grid square into tenths. E.g. 214347 = easting 21.4, northing 34.7. Gives a point within a grid square.
+CONTOUR LINES: Lines joining places of equal height above sea level. Close together = steep slope. Far apart = gentle slope. Concentric circles = hill. V-shape pointing uphill = valley. V-shape pointing downhill = ridge/spur.
+SPOT HEIGHTS: A dot with a number showing the exact height of a specific point in metres.
+TRIANGULATION PILLARS: Triangle symbol on map showing a surveyed height point.
+LAYER COLOURING: Different colours show different height bands. Green = low, yellow/brown = medium, brown/dark = high, white/purple = very high (mountains).
+CROSS SECTIONS: Drawing the side view (profile) of the landscape from a map. Shows how height changes across a route.
+RELIEF: The shape and height of the land. Includes hills, valleys, mountains, plains.
+KEY MAP SYMBOLS: Blue = water (rivers, lakes, sea). Green = woodland/parks. Red = main roads. Black = buildings, railways.`},
+  economic:{name:"Economic Activity",context:`Year 8 Geography - Economic Activity exam topic:
+SECTORS OF INDUSTRY:
+- PRIMARY: Extracting raw materials from the earth/sea/land. Examples: farming, fishing, mining, forestry, quarrying.
+- SECONDARY: Manufacturing/making things from raw materials. Examples: car factories, food processing, construction, steelworks.
+- TERTIARY: Providing services to people. Examples: teaching, healthcare, retail, transport, banking, tourism, restaurants.
+- QUATERNARY: Knowledge-based industries, research, high-tech. Examples: IT, research and development, media, finance consulting, universities.
+CLARK-FISHER MODEL: As countries develop, employment shifts from primary → secondary → tertiary → quaternary. LEDCs (Less Economically Developed Countries) have high primary employment. MEDCs (More Economically Developed Countries) have high tertiary/quaternary employment.
+FARMING TYPES: Arable (crops), pastoral (livestock), mixed (both), intensive (high inputs/outputs per unit area), extensive (low inputs, large area), subsistence (just enough for family), commercial (produce to sell).
+CHANGES IN UK FARMING: Mechanisation (machines replaced workers), use of pesticides and fertilisers, farm amalgamation (farms getting bigger), EU subsidies, supermarket power squeezing prices.
+FARMING PROBLEMS: Soil erosion, water pollution from fertilisers (eutrophication), loss of hedgerows and biodiversity, rural depopulation, food miles, overproduction.
+SOLUTIONS: Organic farming, crop rotation, set-aside land, agri-environment schemes, local food markets, precision farming using GPS.`},
+  atmosphere:{name:"Atmospheric Circulation & Biomes",context:`Year 8 Geography - Global Atmospheric Circulation and Biomes exam topic:
+GLOBAL ATMOSPHERIC CIRCULATION: Three cells in each hemisphere:
+- Hadley Cell (0-30°): Air rises at equator (intense heating = low pressure = heavy rain = rainforest). Air sinks at 30° (high pressure = dry = deserts). Trade winds blow from 30° toward equator.
+- Ferrel Cell (30-60°): Surface winds blow from SW in Northern Hemisphere (prevailing westerlies). 
+- Polar Cell (60-90°): Cold air sinks at poles (high pressure). Polar easterlies blow toward 60°.
+WHY PLACES ARE HOT/COLD/WET/DRY: Equator = hot + wet (low pressure, air rises, cools, condenses = rain). 30°N/S = hot + dry (high pressure, sinking air = no rain = deserts). 60°N/S = cool + wet. Poles = cold + dry.
+DESERT BIOME: Location: 15-35° North and South (subtropical high pressure belts). Hot deserts: Sahara (largest), Arabian, Australian. Climate: very hot days (40°C+), cold nights (below 0°C), less than 250mm rain/year. Plant adaptations: cacti (store water in stems, spines not leaves, deep roots, waxy coating). Animal adaptations: camels (store fat not water, wide feet, long eyelashes), nocturnal behaviour, concentrated urine.
+COLD ENVIRONMENTS: Tundra (Arctic/Antarctic fringe, permafrost, very little vegetation), Taiga/Boreal forest (coniferous trees, cold winters). Plant adaptations: low-growing, short growing season, dark leaves to absorb more light, antifreeze chemicals. Animal adaptations: thick fur/blubber, hibernation, migration, white colouring for camouflage.`},
+  amazon:{name:"Amazon Rainforest",context:`Year 8 Geography - Amazon Rainforest exam topic:
+LOCATION: South America, mainly in Brazil. The Amazon Basin. Straddles the equator. World's largest tropical rainforest — 5.5 million km².
+CLIMATE: Hot and wet all year round. Temperature 25-28°C (very little variation). Rainfall 2000-3000mm per year. No distinct dry season. High humidity. Located at equator so sun always high in sky.
+STRUCTURE (LAYERS):
+- Emergent layer: Tallest trees (50m+), above canopy, exposed to sun and wind.
+- Canopy layer: Dense layer 30-40m, most light absorbed here, most biodiversity.
+- Understorey: Below canopy, little light, shrubs and young trees.
+- Forest floor: Dark, little light, decomposers, leaf litter decomposes quickly in heat.
+PLANT ADAPTATIONS: Drip-tip leaves (shed rain quickly), buttress roots (support tall trees in shallow soil), epiphytes (grow on other plants to reach light), lianas (climbing vines).
+ANIMAL ADAPTATIONS: Camouflage, tree-dwelling (arboreal), nocturnal, loud calls to communicate through dense vegetation, bright colours (poison dart frogs = warning).
+THREATS: Deforestation for cattle ranching (biggest cause), soya farming, logging (legal and illegal), mining, road building, hydroelectric dams.
+IMPACTS: Loss of biodiversity, indigenous people displaced, increased CO2 (less absorption), soil erosion (roots hold soil), disruption of water cycle (trees release water vapour), contribution to climate change.
+MITIGATION: REDD+ (payments to countries to protect forest), national parks and reserves, debt-for-nature swaps, sustainable logging certification (FSC), ecotourism, Brazil's Forest Code.`},
+  tectonics:{name:"Tectonic Activity",context:`Year 8 Geography - Tectonic Activity exam topic:
+PLATE TECTONICS: Earth's crust divided into tectonic plates. Plates float on mantle (semi-molten rock). Convection currents in mantle move plates. Three types of plate boundary: constructive (plates moving apart, e.g. Mid-Atlantic Ridge), destructive (plates colliding, e.g. Andes), conservative (plates sliding past, e.g. San Andreas Fault).
+VOLCANOES: Form at destructive boundaries (subduction — oceanic plate sinks under continental, melts, magma rises) and constructive boundaries (magma rises through gap). Also at hot spots (e.g. Hawaii). Primary effects: lava flows, ash clouds, pyroclastic flows, lahars (mud flows). Secondary effects: fires, disruption to transport/crops/air travel, climate change (ash blocks sun).
+EARTHQUAKES: Caused by plates slipping at boundaries or faults. Measured on Richter scale (logarithmic) and Moment Magnitude Scale. Epicentre = point on surface directly above focus/hypocentre. Primary effects: buildings collapsing, infrastructure damage, deaths. Secondary effects: fires (broken gas pipes), tsunamis, landslides, disease from contaminated water.
+REDUCING IMPACT OF EARTHQUAKES: Earthquake-resistant buildings (cross-bracing, deep foundations, rubber base isolators), early warning systems, education and drills (e.g. Japan), emergency planning, land use planning (avoid building on fault lines).
+REDUCING IMPACT OF VOLCANOES: Exclusion zones, monitoring (seismometers, gas sensors, GPS to detect ground movement), evacuation plans, lava diversion channels, prediction and early warning.
+CASE STUDIES: Haiti 2010 earthquake (LEDC — 230,000 deaths, poor infrastructure), Japan 2011 (MEDC — better prepared, tsunami caused Fukushima nuclear disaster). Montserrat volcano 1995 (ongoing, southern half abandoned).`}
+};
+let currentTopic=null,questions=[],currentQ=0,score=0,answered=false,recentResults=[];
+function goHome(){document.getElementById('topic-screen').style.display='block';document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='none';}
+async function startGame(k){currentTopic=k;questions=[];currentQ=0;score=0;answered=false;recentResults=[];document.getElementById('topic-screen').style.display='none';document.getElementById('end-screen').style.display='none';document.getElementById('game-screen').style.display='block';document.getElementById('game-title').textContent=TOPICS[k].name;updateScoreBadge();updateStreakDots();updateQNumber();await loadQuestion();}
+function updateScoreBadge(){document.getElementById('score-badge').textContent=`${score} / ${currentQ}`;}
+function updateQNumber(){document.getElementById('q-number').textContent=`Question ${currentQ+1}`;}
+function updateStreakDots(){const c=document.getElementById('streak-dots');c.innerHTML='';const s=recentResults.slice(-10);for(let i=0;i<10;i++){const d=document.createElement('div');d.className='streak-dot';if(i<s.length){if(s[i])d.classList.add('hit');else d.classList.add('miss');}c.appendChild(d);}}
+async function loadQuestion(){
+  answered=false;['feedback-box','error-box'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('next-btn').style.display='none';document.getElementById('options-grid').innerHTML='';document.getElementById('q-box').innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+  const t=TOPICS[currentTopic];const prev=questions.slice(-20).map(q=>q.question).join(' | ');
+  const prompt=`You are a quiz master helping 13-year-old Hattie revise Year 8 Geography for an exam in 3 days. Keep questions clear and exam-focused.\n\nTopic content:\n${t.context}\n\n${prev?`Do NOT repeat: ${prev}`:''}\n\nGenerate ONE multiple choice question. Rules:\n- 1-2 sentences, max 20 words\n- 4 answer options max 8 words each\n- 1 correct answer, wrong answers are plausible\n- 1-sentence explanation max 20 words\n\nJSON only: {"question":"...","options":["...","...","...","..."],"correct":0,"explanation":"..."}`;
+  try{const r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});if(!r.ok)throw 0;const d=await r.json();const q=JSON.parse(d.content[0].text.trim().replace(/```json|```/g,''));questions.push(q);renderQuestion(q);}
+  catch(e){document.getElementById('q-box').innerHTML='<span class="q-text">Couldn\'t load — tap Next.</span>';document.getElementById('error-box').style.display='block';document.getElementById('next-btn').style.display='block';}
+}
+function renderQuestion(q){document.getElementById('q-box').innerHTML=`<span class="q-text">${q.question}</span>`;const g=document.getElementById('options-grid');g.innerHTML='';['A','B','C','D'].forEach((l,i)=>{const b=document.createElement('button');b.className='option-btn';b.innerHTML=`<span class="opt-letter">${l}</span><span>${q.options[i]}</span>`;b.onclick=()=>answer(i,q);g.appendChild(b);});}
+function answer(chosen,q){if(answered)return;answered=true;const btns=document.getElementById('options-grid').querySelectorAll('.option-btn');const c=q.correct;const ok=chosen===c;if(ok)score++;recentResults.push(ok);btns.forEach((b,i)=>{b.disabled=true;if(i===c)b.classList.add('correct');else if(i===chosen&&!ok)b.classList.add('wrong');});const fb=document.getElementById('feedback-box');fb.className='feedback-box '+(ok?'correct':'wrong');fb.style.display='block';fb.innerHTML=ok?`<span class="feedback-emoji">🎉</span><strong>Correct!</strong><div class="feedback-explain">${q.explanation}</div>`:`<span class="feedback-emoji">😬</span><strong>Not quite — answer was ${'ABCD'[c]}: ${q.options[c]}</strong><div class="feedback-explain">${q.explanation}</div>`;updateScoreBadge();updateStreakDots();document.getElementById('next-btn').style.display='block';}
+async function nextQuestion(){currentQ++;updateQNumber();await loadQuestion();}
+function showEnd(){document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='block';const tot=currentQ;const pct=tot>0?score/tot:0;let e,ti,m,s;if(pct>=0.9){e='🏆';ti='Brilliant!';s='⭐⭐⭐';m=`${score}/${tot} — Geography sorted!`;}else if(pct>=0.75){e='🎉';ti='Really strong!';s='⭐⭐⭐';m=`${score}/${tot}. Review the ones you missed.`;}else if(pct>=0.6){e='💪';ti='Good effort!';s='⭐⭐';m=`${score}/${tot}. Another round before the exam!`;}else{e='📚';ti='Keep going!';s='⭐';m=`${score}/${tot}. Do this one again — it'll click!`;}document.getElementById('end-emoji').textContent=e;document.getElementById('end-title').textContent=ti;document.getElementById('end-stars').textContent=s;document.getElementById('final-score').textContent=score;document.getElementById('final-total').textContent=tot;document.getElementById('end-msg').textContent=m;}
+function retryGame(){startGame(currentTopic);}
+</script>
+</body>
+</html>

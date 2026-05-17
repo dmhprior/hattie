@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hattie's History Revision ⚔️</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Nunito+Sans:wght@400;600&display=swap');
+  :root{--bg:#1a1208;--card:#2b1e0a;--card2:#33250d;--accent:#f59e0b;--accent2:#ef4444;--accent3:#a78bfa;--text:#fef3e2;--muted:#a07840;--radius:18px;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:18px;line-height:1.6;}
+  .header{background:linear-gradient(135deg,#110b00 0%,#2a1a00 100%);padding:20px 20px 16px;text-align:center;border-bottom:3px solid var(--accent);position:sticky;top:0;z-index:10;}
+  .header h1{font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:900;color:var(--accent);}
+  .header p{font-size:0.85rem;color:var(--muted);margin-top:2px;}
+  #topic-screen{padding:20px 16px 40px;}
+  .section-label{font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;padding-left:4px;}
+  .topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .topic-btn{background:var(--card);border:2px solid transparent;border-radius:var(--radius);padding:18px 14px;cursor:pointer;text-align:center;transition:all 0.2s;}
+  .topic-btn:active{transform:scale(0.97);}
+  .topic-btn .icon{font-size:2rem;margin-bottom:8px;display:block;}
+  .topic-btn .name{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:var(--text);line-height:1.3;}
+  .topic-btn .sub{font-size:0.72rem;color:var(--muted);margin-top:4px;}
+  .topic-btn[data-color="gold"]{border-color:#f59e0b33;} .topic-btn[data-color="gold"]:hover{border-color:var(--accent);background:#f59e0b18;}
+  .topic-btn[data-color="red"]{border-color:#ef444433;} .topic-btn[data-color="red"]:hover{border-color:var(--accent2);background:#ef444418;}
+  .topic-btn[data-color="purple"]{border-color:#a78bfa33;} .topic-btn[data-color="purple"]:hover{border-color:var(--accent3);background:#a78bfa18;}
+  .topic-btn[data-color="green"]{border-color:#4ade8033;} .topic-btn[data-color="green"]:hover{border-color:var(--green);background:#4ade8018;}
+  #game-screen{display:none;}
+  .game-header{background:var(--card);padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #ffffff10;}
+  .back-btn{background:none;border:2px solid var(--muted);border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .game-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;flex:1;}
+  .score-badge{background:var(--accent);color:#1a1208;font-family:'Nunito',sans-serif;font-weight:900;font-size:0.85rem;padding:4px 12px;border-radius:20px;flex-shrink:0;}
+  .streak-bar{background:var(--card);padding:8px 20px;border-bottom:1px solid #ffffff08;display:flex;align-items:center;gap:10px;}
+  .streak-label{font-size:0.75rem;color:var(--muted);font-weight:700;flex-shrink:0;}
+  .streak-dots{display:flex;gap:5px;flex:1;}
+  .streak-dot{width:14px;height:14px;border-radius:50%;background:#ffffff15;transition:all 0.3s;flex-shrink:0;}
+  .streak-dot.hit{background:var(--green);} .streak-dot.miss{background:var(--red);}
+  .finish-btn-small{background:none;border:1.5px solid var(--muted);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:800;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;}
+  .finish-btn-small:hover{border-color:var(--accent);color:var(--accent);}
+  .q-area{padding:20px 20px 0;}
+  .q-number{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .q-box{background:var(--card);border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;min-height:90px;display:flex;align-items:center;border:2px solid #ffffff08;}
+  .q-text{font-family:'Nunito',sans-serif;font-weight:700;font-size:1.1rem;line-height:1.5;color:var(--text);}
+  .loading-dots{display:flex;gap:6px;align-items:center;}
+  .loading-dots span{width:10px;height:10px;background:var(--accent);border-radius:50%;animation:bounce 1.2s infinite;}
+  .loading-dots span:nth-child(2){animation-delay:0.2s;background:var(--accent2);}
+  .loading-dots span:nth-child(3){animation-delay:0.4s;background:var(--accent3);}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4;}40%{transform:translateY(-10px);opacity:1;}}
+  .options-grid{display:flex;flex-direction:column;gap:10px;padding:0 20px 20px;}
+  .option-btn{background:var(--card2);border:2.5px solid #ffffff12;border-radius:var(--radius);padding:16px 18px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;color:var(--text);transition:all 0.15s;display:flex;align-items:center;gap:14px;line-height:1.4;}
+  .option-btn:hover:not(:disabled){border-color:var(--accent);background:#f59e0b12;}
+  .option-btn .opt-letter{width:32px;height:32px;border-radius:50%;background:#ffffff12;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;font-weight:900;}
+  .option-btn.correct{border-color:var(--green);background:#4ade8018;} .option-btn.correct .opt-letter{background:var(--green);color:#1a1208;}
+  .option-btn.wrong{border-color:var(--red);background:#f8717118;} .option-btn.wrong .opt-letter{background:var(--red);color:#1a1208;}
+  .option-btn:disabled{cursor:default;}
+  .feedback-box{margin:0 20px 20px;padding:16px 18px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;line-height:1.5;display:none;}
+  .feedback-box.correct{background:#4ade8018;border:2px solid var(--green);color:#a7f3d0;}
+  .feedback-box.wrong{background:#f8717118;border:2px solid var(--red);color:#fca5a5;}
+  .feedback-emoji{font-size:1.4rem;margin-bottom:6px;display:block;}
+  .feedback-explain{color:var(--text);margin-top:8px;font-weight:600;font-size:0.9rem;}
+  .next-btn{display:none;margin:0 20px 30px;width:calc(100% - 40px);padding:18px;background:var(--accent);color:#1a1208;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;}
+  #end-screen{display:none;padding:40px 20px;text-align:center;}
+  .end-emoji{font-size:4rem;margin-bottom:16px;}
+  .end-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:var(--accent);margin-bottom:8px;}
+  .end-score{font-family:'Nunito',sans-serif;font-weight:800;font-size:3rem;margin:20px 0;color:var(--text);}
+  .end-score span{color:var(--muted);font-size:1.5rem;}
+  .end-msg{color:var(--muted);font-size:0.95rem;margin-bottom:30px;line-height:1.6;}
+  .retry-btn{display:block;width:100%;padding:18px;background:var(--accent);color:#1a1208;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;margin-bottom:12px;}
+  .menu-btn{display:block;width:100%;padding:18px;background:var(--card);color:var(--text);border:2px solid #ffffff20;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;}
+  .stars{color:var(--yellow);font-size:1.5rem;}
+  .error-box{margin:0 20px 20px;padding:16px;background:#ef444418;border:2px solid var(--accent2);border-radius:var(--radius);color:#fca5a5;font-size:0.9rem;display:none;}
+</style>
+</head>
+<body>
+<div class="header"><h1>⚔️ History Revision</h1><p>Hattie's Year 8 · Exam Tuesday 19th May</p></div>
+<div id="topic-screen">
+  <div style="padding:20px 16px 10px;">
+    <div class="section-label">Choose a topic</div>
+    <div class="topic-grid">
+      <button class="topic-btn" data-color="red" onclick="startGame('slavetrade')"><span class="icon">⛓️</span><div class="name">Transatlantic Slave Trade</div><div class="sub">Origins, conditions, abolitionists</div></button>
+      <button class="topic-btn" data-color="gold" onclick="startGame('abolition')"><span class="icon">✊</span><div class="name">Abolitionists</div><div class="sub">Key figures, arguments, campaign</div></button>
+      <button class="topic-btn" data-color="purple" onclick="startGame('rome')"><span class="icon">✝️</span><div class="name">Break from Rome</div><div class="sub">Henry VIII, Reformation, causes & effects</div></button>
+      <button class="topic-btn" data-color="green" onclick="startGame('elizabethan')"><span class="icon">👑</span><div class="name">Elizabethan Golden Age</div><div class="sub">Elizabeth I, exploration, culture, threats</div></button>
+    </div>
+    <div style="padding:14px 16px;background:var(--card);border-radius:14px;font-size:0.82rem;color:var(--muted);line-height:1.6;">⚡ <strong style="color:#f87171">Exam is Tuesday!</strong> Start today — you have tonight and tomorrow morning.</div>
+  </div>
+</div>
+<div id="game-screen">
+  <div class="game-header"><button class="back-btn" onclick="goHome()">←</button><div class="game-title" id="game-title">Topic</div><div class="score-badge" id="score-badge">0 / 0</div></div>
+  <div class="streak-bar"><div class="streak-label">Last 10:</div><div class="streak-dots" id="streak-dots"></div><button class="finish-btn-small" onclick="showEnd()">Finish ✓</button></div>
+  <div class="q-area"><div class="q-number" id="q-number">Question 1</div><div class="q-box" id="q-box"><div class="loading-dots"><span></span><span></span><span></span></div></div></div>
+  <div class="options-grid" id="options-grid"></div>
+  <div class="feedback-box" id="feedback-box"></div>
+  <div class="error-box" id="error-box">Couldn't load — tap Next to try again.</div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next question →</button>
+</div>
+<div id="end-screen">
+  <div class="end-emoji" id="end-emoji">🎉</div><div class="end-title" id="end-title">Session done!</div><div class="stars" id="end-stars">⭐⭐⭐</div>
+  <div class="end-score"><span id="final-score">0</span><span>/ <span id="final-total">0</span></span></div><div class="end-msg" id="end-msg"></div>
+  <button class="retry-btn" onclick="retryGame()">Same topic again 🔄</button><button class="menu-btn" onclick="goHome()">← Choose another topic</button>
+</div>
+<script>
+const PROXY='https://bert-api-proxy.super-night-6aa0.workers.dev';
+const TOPICS={
+  slavetrade:{name:"Transatlantic Slave Trade",context:`Year 8 History - Transatlantic Slave Trade:
+ORIGINS: Began in 16th century. Portugal first, then Britain, Spain, France, Netherlands. Triangular trade: Europe → Africa (goods like guns, cloth, alcohol) → Americas (enslaved Africans) → Europe (sugar, cotton, tobacco). Peak: 17th-18th centuries. Britain dominated by 18th century.
+SCALE: Estimated 12.5 million Africans transported. Around 2 million died on the Middle Passage. British ships carried 3.1 million enslaved people.
+MIDDLE PASSAGE: The journey across the Atlantic. Enslaved people packed into ships, chained, in horrific conditions. Disease, malnutrition, violence. Journey took 6-8 weeks.
+WHERE ENSLAVED PEOPLE WENT: Mostly to Caribbean (Jamaica, Barbados) and Americas (USA, Brazil) to work on sugar, cotton, tobacco plantations.
+CONDITIONS ON PLANTATIONS: Dawn to dusk labour, brutal punishments, families separated, no legal rights, enslaved people treated as property. Chattel slavery — children of enslaved people also enslaved.
+PROFITS: Slavery made enormous profits for Britain. Cities like Bristol, Liverpool, London grew wealthy. Sugar was hugely profitable. Banks, insurance companies, ports all benefited.
+RESISTANCE: Enslaved people resisted through — working slowly, breaking tools, running away, revolts (e.g. Haitian Revolution 1791 — only successful slave revolt, led by Toussaint L'Ouverture). Songs, maintaining culture, religion.
+IMPACT ON AFRICA: Depopulation, wars between African states to capture slaves, destabilisation of African kingdoms, loss of young people.`},
+  abolition:{name:"Abolitionists",context:`Year 8 History - Abolitionists and the Campaign to End Slavery:
+KEY ABOLITIONISTS:
+- Olaudah Equiano (c.1745-1797): Formerly enslaved, wrote autobiography "The Interesting Narrative" (1789). Powerful first-hand account. Member of Sons of Africa group.
+- Granville Sharp (1735-1813): Lawyer who won the Somerset Case (1772) — ruled no enslaved person could be forcibly removed from England. Founded Society for Effecting the Abolition of the Slave Trade (1787).
+- Thomas Clarkson (1760-1846): Researched conditions on slave ships, collected evidence, toured Britain giving lectures, co-founded the abolition society.
+- William Wilberforce (1759-1833): MP who introduced abolition bills in Parliament year after year. Deeply religious. Key parliamentary champion.
+- Harriet Beecher Stowe: Wrote Uncle Tom's Cabin (1852) — hugely influential novel showing horrors of slavery in USA.
+- Frederick Douglass: Formerly enslaved American, powerful speaker and writer.
+CAMPAIGN METHODS: Petitions (Manchester petition 1787 — 10,000 signatures), boycotts of slave-produced goods (especially sugar), public lectures and speeches, publishing accounts, parliamentary lobbying, Josiah Wedgwood's "Am I Not a Man and a Brother?" medallion.
+KEY DATES: 1772: Somerset Case. 1787: Society for Abolition founded. 1807: Slave Trade Act — abolished British slave trade. 1833: Slavery Abolition Act — freed enslaved people in British Empire (compensation paid to slaveholders, not enslaved people). 1865: USA abolishes slavery (13th Amendment after Civil War).
+WHY ABOLITION SUCCEEDED: Moral/religious arguments, economic arguments (free labour more efficient), fear of revolt, changing public opinion, political pressure.`},
+  rome:{name:"Break from Rome",context:`Year 8 History - Henry VIII and the Break from Rome:
+BACKGROUND: In early 16th century, England was Catholic. The Pope in Rome was head of the Church. Henry VIII was initially a devout Catholic — Pope Leo X gave him title "Defender of the Faith" for defending Catholicism against Luther.
+CAUSES OF THE BREAK:
+1. Marriage problem: Henry wanted to annul (cancel) his marriage to Catherine of Aragon because she had not produced a male heir. The Pope refused to grant the annulment (Catherine was aunt of Holy Roman Emperor Charles V who pressured Pope).
+2. Desire for control: Henry wanted power over the Church and its wealth.
+3. Protestant ideas spreading: Martin Luther's Reformation was spreading. New ideas challenged papal authority.
+KEY EVENTS:
+- 1527: Henry asks Pope for annulment — refused.
+- 1532: Thomas Cromwell begins dismantling papal power.
+- 1533: Henry secretly marries Anne Boleyn. Archbishop Cranmer grants annulment. Catherine of Aragon's marriage declared void.
+- 1534: Act of Supremacy — Henry declared Supreme Head of the Church of England. Break from Rome complete.
+- 1535-1541: Dissolution of the Monasteries — Henry closed monasteries, seized their wealth (£1.3 million). Monks and nuns expelled.
+CONSEQUENCES: England became Protestant (though Henry kept many Catholic practices). Pilgrimage of Grace (1536) — northern rebellion in defence of Catholicism, crushed. Thomas More and Bishop Fisher executed for refusing to accept Henry as head of Church. Monasteries destroyed, their land sold to nobles. Long-term: religious conflict between Catholics and Protestants.`},
+  elizabethan:{name:"Elizabethan Golden Age",context:`Year 8 History - The Elizabethan Golden Age:
+ELIZABETH I (1558-1603): Daughter of Henry VIII and Anne Boleyn. Clever, educated, spoke several languages. Never married — "the Virgin Queen." Ruled through a mix of charm, intelligence, and political skill.
+RELIGIOUS SETTLEMENT 1559: Elizabeth took a "middle way" — Protestant but not extreme. Act of Supremacy (Elizabeth head of Church of England). Act of Uniformity (Book of Common Prayer). Aimed to satisfy both Protestants and moderate Catholics.
+EXPLORATION AND EMPIRE: Francis Drake — first Englishman to circumnavigate the globe (1577-80), also a pirate ("privateer") raiding Spanish ships. Walter Raleigh — attempted to colonise Virginia (America). Martin Frobisher — searched for Northwest Passage. England beginning to build a trading empire.
+CULTURE: Golden age of English literature and theatre. William Shakespeare (1564-1616) — wrote 37 plays including Hamlet, Romeo and Juliet. Globe Theatre built 1599. Christopher Marlowe (playwright). Edmund Spenser (poet). Cultural flourishing partly funded by wealth from trade.
+THREATS TO ELIZABETH:
+1. Mary Queen of Scots: Catholic rival claim to English throne. Fled to England 1568, kept prisoner for 19 years, executed 1587 after Babington Plot (planned to assassinate Elizabeth).
+2. Spain: Philip II of Spain — Catholic, angered by English pirates and support for Protestant Dutch rebels. Launched the Spanish Armada (1588) — 130 ships to invade England. Defeated by English navy (Drake, Howard) and storms. Major English victory.
+3. Catholic plots: Ridolfi Plot (1571), Throckmorton Plot (1583), Babington Plot (1586) — all aimed to replace Elizabeth with Mary.
+LEGACY: Established England as Protestant, laid foundations for British Empire, golden age of culture. Elizabeth never named a successor — James VI of Scotland became James I.`}
+};
+let currentTopic=null,questions=[],currentQ=0,score=0,answered=false,recentResults=[];
+function goHome(){document.getElementById('topic-screen').style.display='block';document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='none';}
+async function startGame(k){currentTopic=k;questions=[];currentQ=0;score=0;answered=false;recentResults=[];document.getElementById('topic-screen').style.display='none';document.getElementById('end-screen').style.display='none';document.getElementById('game-screen').style.display='block';document.getElementById('game-title').textContent=TOPICS[k].name;updateScoreBadge();updateStreakDots();updateQNumber();await loadQuestion();}
+function updateScoreBadge(){document.getElementById('score-badge').textContent=`${score} / ${currentQ}`;}
+function updateQNumber(){document.getElementById('q-number').textContent=`Question ${currentQ+1}`;}
+function updateStreakDots(){const c=document.getElementById('streak-dots');c.innerHTML='';const s=recentResults.slice(-10);for(let i=0;i<10;i++){const d=document.createElement('div');d.className='streak-dot';if(i<s.length){if(s[i])d.classList.add('hit');else d.classList.add('miss');}c.appendChild(d);}}
+async function loadQuestion(){
+  answered=false;['feedback-box','error-box'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('next-btn').style.display='none';document.getElementById('options-grid').innerHTML='';document.getElementById('q-box').innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+  const t=TOPICS[currentTopic];const prev=questions.slice(-20).map(q=>q.question).join(' | ');
+  const prompt=`You are a quiz master helping 13-year-old Hattie revise Year 8 History for an exam in 3 days. Keep questions clear and exam-focused.\n\nTopic content:\n${t.context}\n\n${prev?`Do NOT repeat: ${prev}`:''}\n\nGenerate ONE multiple choice question. Rules:\n- 1-2 sentences max 20 words\n- 4 answer options max 8 words each\n- 1 correct answer, wrong answers are plausible\n- 1-sentence explanation max 20 words\n\nJSON only: {"question":"...","options":["...","...","...","..."],"correct":0,"explanation":"..."}`;
+  try{const r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});if(!r.ok)throw 0;const d=await r.json();const q=JSON.parse(d.content[0].text.trim().replace(/```json|```/g,''));questions.push(q);renderQuestion(q);}
+  catch(e){document.getElementById('q-box').innerHTML='<span class="q-text">Couldn\'t load — tap Next.</span>';document.getElementById('error-box').style.display='block';document.getElementById('next-btn').style.display='block';}
+}
+function renderQuestion(q){document.getElementById('q-box').innerHTML=`<span class="q-text">${q.question}</span>`;const g=document.getElementById('options-grid');g.innerHTML='';['A','B','C','D'].forEach((l,i)=>{const b=document.createElement('button');b.className='option-btn';b.innerHTML=`<span class="opt-letter">${l}</span><span>${q.options[i]}</span>`;b.onclick=()=>answer(i,q);g.appendChild(b);});}
+function answer(chosen,q){if(answered)return;answered=true;const btns=document.getElementById('options-grid').querySelectorAll('.option-btn');const c=q.correct;const ok=chosen===c;if(ok)score++;recentResults.push(ok);btns.forEach((b,i)=>{b.disabled=true;if(i===c)b.classList.add('correct');else if(i===chosen&&!ok)b.classList.add('wrong');});const fb=document.getElementById('feedback-box');fb.className='feedback-box '+(ok?'correct':'wrong');fb.style.display='block';fb.innerHTML=ok?`<span class="feedback-emoji">🎉</span><strong>Correct!</strong><div class="feedback-explain">${q.explanation}</div>`:`<span class="feedback-emoji">😬</span><strong>Not quite — answer was ${'ABCD'[c]}: ${q.options[c]}</strong><div class="feedback-explain">${q.explanation}</div>`;updateScoreBadge();updateStreakDots();document.getElementById('next-btn').style.display='block';}
+async function nextQuestion(){currentQ++;updateQNumber();await loadQuestion();}
+function showEnd(){document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='block';const tot=currentQ;const pct=tot>0?score/tot:0;let e,ti,m,s;if(pct>=0.9){e='🏆';ti='Brilliant!';s='⭐⭐⭐';m=`${score}/${tot} — History sorted!`;}else if(pct>=0.75){e='🎉';ti='Really strong!';s='⭐⭐⭐';m=`${score}/${tot}. Review the ones you missed.`;}else if(pct>=0.6){e='💪';ti='Good effort!';s='⭐⭐';m=`${score}/${tot}. One more round before Tuesday!`;}else{e='📚';ti='Keep going!';s='⭐';m=`${score}/${tot}. Do this one again — it\'ll click!`;}document.getElementById('end-emoji').textContent=e;document.getElementById('end-title').textContent=ti;document.getElementById('end-stars').textContent=s;document.getElementById('final-score').textContent=score;document.getElementById('final-total').textContent=tot;document.getElementById('end-msg').textContent=m;}
+function retryGame(){startGame(currentTopic);}
+</script>
+</body>
+</html>
