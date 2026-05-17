@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hattie's Maths Revision ➕</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Nunito+Sans:wght@400;600&display=swap');
+  :root{--bg:#0f1a0f;--card:#1a2b1a;--card2:#1f331f;--accent:#4ade80;--accent2:#f97316;--accent3:#facc15;--text:#e8f4e8;--muted:#6a9b6a;--radius:18px;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:18px;line-height:1.6;}
+  .header{background:linear-gradient(135deg,#0a1a0a 0%,#1a3a1a 100%);padding:20px 20px 16px;text-align:center;border-bottom:3px solid var(--accent);position:sticky;top:0;z-index:10;}
+  .header h1{font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:900;color:var(--accent);}
+  .header p{font-size:0.85rem;color:var(--muted);margin-top:2px;}
+  #topic-screen{padding:20px 16px 40px;}
+  .section-label{font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;padding-left:4px;}
+  .topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .topic-btn{background:var(--card);border:2px solid transparent;border-radius:var(--radius);padding:18px 14px;cursor:pointer;text-align:center;transition:all 0.2s;}
+  .topic-btn:active{transform:scale(0.97);}
+  .topic-btn .icon{font-size:2rem;margin-bottom:8px;display:block;}
+  .topic-btn .name{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:var(--text);line-height:1.3;}
+  .topic-btn .sub{font-size:0.72rem;color:var(--muted);margin-top:4px;}
+  .topic-btn[data-color="green"]{border-color:#4ade8033;} .topic-btn[data-color="green"]:hover{border-color:var(--green);background:#4ade8018;}
+  .topic-btn[data-color="orange"]{border-color:#f9731633;} .topic-btn[data-color="orange"]:hover{border-color:var(--accent2);background:#f9731618;}
+  .topic-btn[data-color="yellow"]{border-color:#facc1533;} .topic-btn[data-color="yellow"]:hover{border-color:var(--accent3);background:#facc1518;}
+  .topic-btn[data-color="blue"]{border-color:#60a5fa33;} .topic-btn[data-color="blue"]:hover{border-color:#60a5fa;background:#60a5fa18;}
+  .topic-btn[data-color="purple"]{border-color:#a78bfa33;} .topic-btn[data-color="purple"]:hover{border-color:#a78bfa;background:#a78bfa18;}
+  .topic-btn[data-color="pink"]{border-color:#f472b633;} .topic-btn[data-color="pink"]:hover{border-color:#f472b6;background:#f472b618;}
+  #game-screen{display:none;}
+  .game-header{background:var(--card);padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #ffffff10;}
+  .back-btn{background:none;border:2px solid var(--muted);border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .game-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;flex:1;}
+  .score-badge{background:var(--accent);color:#0f1a0f;font-family:'Nunito',sans-serif;font-weight:900;font-size:0.85rem;padding:4px 12px;border-radius:20px;flex-shrink:0;}
+  .streak-bar{background:var(--card);padding:8px 20px;border-bottom:1px solid #ffffff08;display:flex;align-items:center;gap:10px;}
+  .streak-label{font-size:0.75rem;color:var(--muted);font-weight:700;flex-shrink:0;}
+  .streak-dots{display:flex;gap:5px;flex:1;}
+  .streak-dot{width:14px;height:14px;border-radius:50%;background:#ffffff15;transition:all 0.3s;flex-shrink:0;}
+  .streak-dot.hit{background:var(--green);} .streak-dot.miss{background:var(--red);}
+  .finish-btn-small{background:none;border:1.5px solid var(--muted);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:800;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;}
+  .finish-btn-small:hover{border-color:var(--accent);color:var(--accent);}
+  .q-area{padding:20px 20px 0;}
+  .q-number{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .q-box{background:var(--card);border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;min-height:90px;display:flex;align-items:center;border:2px solid #ffffff08;}
+  .q-text{font-family:'Nunito',sans-serif;font-weight:700;font-size:1.1rem;line-height:1.5;color:var(--text);}
+  .loading-dots{display:flex;gap:6px;align-items:center;}
+  .loading-dots span{width:10px;height:10px;background:var(--accent);border-radius:50%;animation:bounce 1.2s infinite;}
+  .loading-dots span:nth-child(2){animation-delay:0.2s;background:var(--accent3);}
+  .loading-dots span:nth-child(3){animation-delay:0.4s;background:var(--accent2);}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4;}40%{transform:translateY(-10px);opacity:1;}}
+  .options-grid{display:flex;flex-direction:column;gap:10px;padding:0 20px 20px;}
+  .option-btn{background:var(--card2);border:2.5px solid #ffffff12;border-radius:var(--radius);padding:16px 18px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;color:var(--text);transition:all 0.15s;display:flex;align-items:center;gap:14px;line-height:1.4;}
+  .option-btn:hover:not(:disabled){border-color:var(--accent);background:#4ade8012;}
+  .option-btn .opt-letter{width:32px;height:32px;border-radius:50%;background:#ffffff12;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;font-weight:900;}
+  .option-btn.correct{border-color:var(--green);background:#4ade8018;} .option-btn.correct .opt-letter{background:var(--green);color:#0f1a0f;}
+  .option-btn.wrong{border-color:var(--red);background:#f8717118;} .option-btn.wrong .opt-letter{background:var(--red);color:#0f1a0f;}
+  .option-btn:disabled{cursor:default;}
+  .feedback-box{margin:0 20px 20px;padding:16px 18px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;line-height:1.5;display:none;}
+  .feedback-box.correct{background:#4ade8018;border:2px solid var(--green);color:#a7f3d0;}
+  .feedback-box.wrong{background:#f8717118;border:2px solid var(--red);color:#fca5a5;}
+  .feedback-emoji{font-size:1.4rem;margin-bottom:6px;display:block;}
+  .feedback-explain{color:var(--text);margin-top:8px;font-weight:600;font-size:0.9rem;}
+  .next-btn{display:none;margin:0 20px 30px;width:calc(100% - 40px);padding:18px;background:var(--accent);color:#0f1a0f;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;}
+  #end-screen{display:none;padding:40px 20px;text-align:center;}
+  .end-emoji{font-size:4rem;margin-bottom:16px;}
+  .end-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:var(--accent);margin-bottom:8px;}
+  .end-score{font-family:'Nunito',sans-serif;font-weight:800;font-size:3rem;margin:20px 0;color:var(--text);}
+  .end-score span{color:var(--muted);font-size:1.5rem;}
+  .end-msg{color:var(--muted);font-size:0.95rem;margin-bottom:30px;line-height:1.6;}
+  .retry-btn{display:block;width:100%;padding:18px;background:var(--accent);color:#0f1a0f;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;margin-bottom:12px;}
+  .menu-btn{display:block;width:100%;padding:18px;background:var(--card);color:var(--text);border:2px solid #ffffff20;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;}
+  .stars{color:var(--accent3);font-size:1.5rem;}
+  .error-box{margin:0 20px 20px;padding:16px;background:#f9731618;border:2px solid var(--accent2);border-radius:var(--radius);color:#fdba74;font-size:0.9rem;display:none;}
+</style>
+</head>
+<body>
+<div class="header"><h1>➕ Maths Revision</h1><p>Hattie's Year 8 · Exam Wednesday 20th May</p></div>
+<div id="topic-screen">
+  <div style="padding:20px 16px 10px;">
+    <div class="section-label">Choose a topic</div>
+    <div class="topic-grid">
+      <button class="topic-btn" data-color="green" onclick="startGame('conversion')"><span class="icon">📏</span><div class="name">Unit Conversion</div><div class="sub">Metric, imperial, area, volume</div></button>
+      <button class="topic-btn" data-color="orange" onclick="startGame('bestbuys')"><span class="icon">🛒</span><div class="name">Best Buys</div><div class="sub">Value for money, unit price, comparison</div></button>
+      <button class="topic-btn" data-color="yellow" onclick="startGame('ratio')"><span class="icon">⚖️</span><div class="name">Ratio</div><div class="sub">Simplifying, sharing, problems</div></button>
+      <button class="topic-btn" data-color="blue" onclick="startGame('negatives')"><span class="icon">➖</span><div class="name">Negative Numbers</div><div class="sub">All four operations with negatives</div></button>
+      <button class="topic-btn" data-color="purple" onclick="startGame('percentages')"><span class="icon">%</span><div class="name">Percentages</div><div class="sub">Find %, increase/decrease, reverse %</div></button>
+      <button class="topic-btn" data-color="pink" onclick="startGame('indices')"><span class="icon">🔢</span><div class="name">Laws of Indices</div><div class="sub">Multiply, divide, power of power, zero</div></button>
+    </div>
+    <div style="padding:14px 16px;background:var(--card);border-radius:14px;font-size:0.82rem;color:var(--muted);line-height:1.6;">⚡ <strong style="color:#f87171">Exam is Wednesday!</strong> Focus on whichever topics feel shakiest first.</div>
+  </div>
+</div>
+<div id="game-screen">
+  <div class="game-header"><button class="back-btn" onclick="goHome()">←</button><div class="game-title" id="game-title">Topic</div><div class="score-badge" id="score-badge">0 / 0</div></div>
+  <div class="streak-bar"><div class="streak-label">Last 10:</div><div class="streak-dots" id="streak-dots"></div><button class="finish-btn-small" onclick="showEnd()">Finish ✓</button></div>
+  <div class="q-area"><div class="q-number" id="q-number">Question 1</div><div class="q-box" id="q-box"><div class="loading-dots"><span></span><span></span><span></span></div></div></div>
+  <div class="options-grid" id="options-grid"></div>
+  <div class="feedback-box" id="feedback-box"></div>
+  <div class="error-box" id="error-box">Couldn't load — tap Next to try again.</div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next question →</button>
+</div>
+<div id="end-screen">
+  <div class="end-emoji" id="end-emoji">🎉</div><div class="end-title" id="end-title">Session done!</div><div class="stars" id="end-stars">⭐⭐⭐</div>
+  <div class="end-score"><span id="final-score">0</span><span>/ <span id="final-total">0</span></span></div><div class="end-msg" id="end-msg"></div>
+  <button class="retry-btn" onclick="retryGame()">Same topic again 🔄</button><button class="menu-btn" onclick="goHome()">← Choose another topic</button>
+</div>
+<script>
+const PROXY='https://bert-api-proxy.super-night-6aa0.workers.dev';
+const TOPICS={
+  conversion:{name:"Unit Conversion",context:`Year 8 Maths - Unit Conversion:
+METRIC LENGTH: 1 km = 1000 m. 1 m = 100 cm. 1 cm = 10 mm. 1 m = 1000 mm. Convert larger to smaller: multiply. Smaller to larger: divide. E.g. 3.5 km = 3500 m. 250 cm = 2.5 m.
+METRIC MASS: 1 kg = 1000 g. 1 tonne = 1000 kg. E.g. 2.4 kg = 2400 g. 750 g = 0.75 kg.
+METRIC VOLUME/CAPACITY: 1 litre = 1000 ml. 1 litre = 1000 cm³. 1 ml = 1 cm³. E.g. 2.5 litres = 2500 ml.
+METRIC AREA: 1 m² = 10,000 cm² (100 × 100). 1 km² = 1,000,000 m². 1 cm² = 100 mm² (10 × 10).
+METRIC VOLUME (3D): 1 m³ = 1,000,000 cm³ (100 × 100 × 100). 1 litre = 1000 cm³.
+IMPERIAL TO METRIC (approximations): 1 inch ≈ 2.5 cm. 1 foot ≈ 30 cm. 1 mile ≈ 1.6 km. 1 kg ≈ 2.2 pounds. 1 gallon ≈ 4.5 litres. 1 stone = 14 pounds.
+TIME: 1 hour = 60 minutes. 1 minute = 60 seconds. 1 day = 24 hours. 1 week = 7 days. 1 year = 365 days (366 leap year).
+SPEED: km/h to m/s: divide by 3.6. m/s to km/h: multiply by 3.6. Speed = distance ÷ time. Distance = speed × time. Time = distance ÷ speed.
+TEMPERATURE: Celsius to Fahrenheit: F = (C × 9/5) + 32. Fahrenheit to Celsius: C = (F − 32) × 5/9. Water freezes at 0°C (32°F), boils at 100°C (212°F).`},
+  bestbuys:{name:"Best Buys",context:`Year 8 Maths - Best Buys and Value for Money:
+UNIT PRICE METHOD: Find the cost per unit (per gram, per ml, per item) then compare. Divide total cost by quantity. Lowest unit price = best value.
+EXAMPLE: 400g for £2.00 vs 650g for £3.12. Unit price A: £2.00÷400=0.5p per gram. Unit price B: £3.12÷650=0.48p per gram. B is better value.
+QUANTITY PER PENNY METHOD: Divide quantity by cost. Higher quantity per penny = better value.
+COMPARING DIFFERENT UNITS: Convert to same unit first, then compare. E.g. 1.5 litres for £1.20 vs 500ml for 45p. Convert 1.5 litres = 1500ml. Unit price A: £1.20÷1500=0.08p/ml. Unit price B: 45p÷500=0.09p/ml. A is better value.
+PERCENTAGE EXTRA FREE: "25% extra free" — original amount × 1.25 for new amount. Cost per unit: original price ÷ new amount.
+MULTIBUY DEALS: "3 for £2" — divide £2 by 3 = 66.7p each. Compare with single price.
+RATIO IN BEST BUYS: Use ratio to compare. 400g:£2 = 200g:£1 = 1g:0.5p. 650g:£3.12 = 1g:0.48p.
+ALWAYS STATE CONCLUSION: "X is better value because it costs less per gram/ml."
+COMMON MISTAKES: Forgetting to convert units, not identifying which is the best buy clearly.`},
+  ratio:{name:"Ratio",context:`Year 8 Maths - Ratio:
+WRITING RATIOS: Use colon notation. E.g. 3:5. Order matters — match order of question.
+SIMPLIFYING RATIOS: Divide both parts by HCF. 12:18 → ÷6 → 2:3. 15:25 → ÷5 → 3:5. Must be whole numbers.
+EQUIVALENT RATIOS: Multiply or divide both parts by same number. 2:3 = 4:6 = 6:9 = 10:15.
+RATIO TO FRACTIONS: If ratio is 3:5, first part is 3/(3+5) = 3/8 of total. Second part is 5/8.
+SHARING IN A RATIO: Find total parts, find value of one part, multiply. E.g. Share £40 in ratio 3:5. Total parts = 8. One part = £40÷8 = £5. Shares: 3×£5=£15 and 5×£5=£25. Check: £15+£25=£40 ✓
+RATIO PROBLEMS: E.g. "The ratio of boys to girls is 2:3. There are 12 boys. How many girls?" 2 parts = 12, so 1 part = 6. Girls = 3×6 = 18.
+RECIPE PROBLEMS: Scale up/down proportionally. If recipe for 4 people needs 200g flour, for 6 people: 200÷4×6 = 300g.
+RATIO AND ALGEBRA: If a:b = 3:4 and a+b=35, then 3x+4x=35, 7x=35, x=5. So a=15, b=20.
+MAP SCALE AS RATIO: 1:50000 means 1 unit on map = 50000 units in real life. 2cm on map = 2×50000 = 100000cm = 1000m = 1km.
+3-PART RATIOS: Share £60 in ratio 1:2:3. Total parts=6. One part=£10. Shares: £10, £20, £30.`},
+  negatives:{name:"Negative Numbers",context:`Year 8 Maths - Negative Numbers:
+NUMBER LINE: Negative numbers are to the LEFT of zero. -5 < -3 < -1 < 0 < 1 < 3 < 5. Temperature: -10°C is colder than -2°C.
+ADDING NEGATIVES: Move left on number line. 5 + (-3) = 5 - 3 = 2. -2 + (-4) = -6. -3 + 7 = 4.
+SUBTRACTING NEGATIVES: Two negatives make positive. 5 - (-3) = 5 + 3 = 8. -2 - (-5) = -2 + 5 = 3. 3 - (-4) = 7.
+MULTIPLYING: pos × pos = pos. neg × neg = pos. pos × neg = neg. neg × pos = neg. Examples: (-3)×(-4)=12. (-3)×4=-12. 5×(-6)=-30. (-2)×(-7)=14.
+DIVIDING: Same rules as multiplying. (-12)÷(-3)=4. 12÷(-3)=-4. (-20)÷4=-5. (-15)÷(-5)=3.
+POWERS: (-2)²=(-2)×(-2)=4 (positive). (-2)³=(-2)×(-2)×(-2)=-8 (negative). Even power of negative = positive. Odd power = negative.
+ORDERING: Put in ascending order: -5, -3, -1, 0, 2, 4. On a number line, left is smaller.
+COORDINATES: Can have negative coordinates. (-3, 4) means 3 left, 4 up. Plot accurately in all four quadrants.
+IN CONTEXT: Temperature change: starts at -4°C, rises 9°C → -4+9=5°C. Profit/loss: lost £200, gained £350 → -200+350=£150 profit. Height above/below sea level.
+ALGEBRA WITH NEGATIVES: 3x where x=-2: 3×(-2)=-6. -2x²+3 where x=-1: -2×1+3=1.`},
+  percentages:{name:"Percentages",context:`Year 8 Maths - Percentages:
+FINDING A PERCENTAGE: Method 1: find 10% (÷10) then scale. E.g. 35% of £80: 10%=£8, 30%=£24, 5%=£4, 35%=£28. Method 2: multiply by decimal. 35% of £80 = 0.35×80=£28.
+PERCENTAGE INCREASE: New amount = original × (1 + %/100). E.g. increase £60 by 20%: £60×1.2=£72. Or: find 20% (£12) and add to original (£72).
+PERCENTAGE DECREASE: New amount = original × (1 - %/100). E.g. decrease £80 by 15%: £80×0.85=£68. Or: find 15% (£12) and subtract (£68).
+PERCENTAGE CHANGE: % change = (change ÷ original) × 100. E.g. price goes from £40 to £52. Change=£12. % change = (12÷40)×100 = 30% increase.
+EXPRESSING AS PERCENTAGE: (part ÷ whole) × 100. E.g. 18 out of 24: (18÷24)×100 = 75%.
+REVERSE PERCENTAGE: Finding original before % change. If after 20% increase price is £84, original = £84÷1.2 = £70. If after 30% decrease price is £49, original = £49÷0.7 = £70.
+COMPOUND INTEREST: Apply percentage repeatedly. £1000 at 5% for 3 years: 1000×1.05³=1000×1.157625=£1157.63.
+SIMPLE INTEREST: Interest = Principal × Rate × Time. £1000 at 5% for 3 years: 1000×0.05×3=£150 interest.
+VAT: Value Added Tax = 20% in UK. Price + VAT: multiply by 1.2. E.g. £50+20%VAT=£50×1.2=£60.
+SALE PRICES: 25% off = 75% of original = multiply by 0.75.`},
+  indices:{name:"Laws of Indices",context:`Year 8 Maths - Laws of Indices (Index Laws):
+NOTATION: aⁿ means a multiplied by itself n times. Base = a, Index/Exponent = n. E.g. 2³=2×2×2=8. 5²=25. 10⁴=10000.
+LAW 1 - MULTIPLYING: aᵐ × aⁿ = aᵐ⁺ⁿ (add the indices). SAME BASE ONLY. E.g. 3⁴×3²=3⁶. 5³×5⁵=5⁸. x³×x⁴=x⁷. 2⁴×2=2⁵ (since 2=2¹).
+LAW 2 - DIVIDING: aᵐ ÷ aⁿ = aᵐ⁻ⁿ (subtract the indices). E.g. 5⁶÷5²=5⁴. x⁸÷x³=x⁵. 3⁵÷3⁵=3⁰=1.
+LAW 3 - POWER OF A POWER: (aᵐ)ⁿ = aᵐˣⁿ (multiply the indices). E.g. (2³)⁴=2¹²=(3²)⁵=3¹⁰. (x⁴)³=x¹².
+ZERO INDEX: a⁰=1 for any non-zero a. E.g. 5⁰=1. 100⁰=1. x⁰=1.
+NEGATIVE INDEX: a⁻ⁿ=1/aⁿ. E.g. 2⁻³=1/2³=1/8. 5⁻²=1/25. x⁻¹=1/x.
+FRACTIONAL INDEX: a^(1/n) = nth root of a. a^(1/2)=√a. a^(1/3)=∛a. E.g. 16^(1/2)=4. 27^(1/3)=3. 8^(1/3)=2.
+COMBINED: a^(m/n) = (nth root of a)^m. E.g. 8^(2/3)=(∛8)²=2²=4. 27^(2/3)=(∛27)²=3²=9.
+APPLYING TO ALGEBRA: x³×x⁴=x⁷. (2x³)²=4x⁶. 6x⁵÷2x²=3x³. (3x²)³=27x⁶.
+COMMON MISTAKES: Adding bases instead of indices. Multiplying indices when dividing. Not recognising a⁰=1.`}
+};
+let currentTopic=null,questions=[],currentQ=0,score=0,answered=false,recentResults=[];
+function goHome(){document.getElementById('topic-screen').style.display='block';document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='none';}
+async function startGame(k){currentTopic=k;questions=[];currentQ=0;score=0;answered=false;recentResults=[];document.getElementById('topic-screen').style.display='none';document.getElementById('end-screen').style.display='none';document.getElementById('game-screen').style.display='block';document.getElementById('game-title').textContent=TOPICS[k].name;updateScoreBadge();updateStreakDots();updateQNumber();await loadQuestion();}
+function updateScoreBadge(){document.getElementById('score-badge').textContent=`${score} / ${currentQ}`;}
+function updateQNumber(){document.getElementById('q-number').textContent=`Question ${currentQ+1}`;}
+function updateStreakDots(){const c=document.getElementById('streak-dots');c.innerHTML='';const s=recentResults.slice(-10);for(let i=0;i<10;i++){const d=document.createElement('div');d.className='streak-dot';if(i<s.length){if(s[i])d.classList.add('hit');else d.classList.add('miss');}c.appendChild(d);}}
+async function loadQuestion(){
+  answered=false;['feedback-box','error-box'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('next-btn').style.display='none';document.getElementById('options-grid').innerHTML='';document.getElementById('q-box').innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+  const t=TOPICS[currentTopic];const prev=questions.slice(-20).map(q=>q.question).join(' | ');
+  const prompt=`You are a quiz master helping 13-year-old Hattie revise Year 8 Maths for an exam in 3 days. Keep questions clear with actual numbers to work with.\n\nTopic content:\n${t.context}\n\n${prev?`Do NOT repeat: ${prev}`:''}\n\nGenerate ONE multiple choice question with real numbers. Rules:\n- 1-2 sentences max 20 words\n- 4 answer options (numbers/expressions) max 8 words each\n- 1 correct answer, wrong answers are common mistakes\n- 1-sentence explanation showing the working, max 20 words\n\nJSON only: {"question":"...","options":["...","...","...","..."],"correct":0,"explanation":"..."}`;
+  try{const r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});if(!r.ok)throw 0;const d=await r.json();const q=JSON.parse(d.content[0].text.trim().replace(/```json|```/g,''));questions.push(q);renderQuestion(q);}
+  catch(e){document.getElementById('q-box').innerHTML='<span class="q-text">Couldn\'t load — tap Next.</span>';document.getElementById('error-box').style.display='block';document.getElementById('next-btn').style.display='block';}
+}
+function renderQuestion(q){document.getElementById('q-box').innerHTML=`<span class="q-text">${q.question}</span>`;const g=document.getElementById('options-grid');g.innerHTML='';['A','B','C','D'].forEach((l,i)=>{const b=document.createElement('button');b.className='option-btn';b.innerHTML=`<span class="opt-letter">${l}</span><span>${q.options[i]}</span>`;b.onclick=()=>answer(i,q);g.appendChild(b);});}
+function answer(chosen,q){if(answered)return;answered=true;const btns=document.getElementById('options-grid').querySelectorAll('.option-btn');const c=q.correct;const ok=chosen===c;if(ok)score++;recentResults.push(ok);btns.forEach((b,i)=>{b.disabled=true;if(i===c)b.classList.add('correct');else if(i===chosen&&!ok)b.classList.add('wrong');});const fb=document.getElementById('feedback-box');fb.className='feedback-box '+(ok?'correct':'wrong');fb.style.display='block';fb.innerHTML=ok?`<span class="feedback-emoji">🎉</span><strong>Correct!</strong><div class="feedback-explain">${q.explanation}</div>`:`<span class="feedback-emoji">😬</span><strong>Not quite — answer was ${'ABCD'[c]}: ${q.options[c]}</strong><div class="feedback-explain">${q.explanation}</div>`;updateScoreBadge();updateStreakDots();document.getElementById('next-btn').style.display='block';}
+async function nextQuestion(){currentQ++;updateQNumber();await loadQuestion();}
+function showEnd(){document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='block';const tot=currentQ;const pct=tot>0?score/tot:0;let e,ti,m,s;if(pct>=0.9){e='🏆';ti='Brilliant!';s='⭐⭐⭐';m=`${score}/${tot} — Maths sorted!`;}else if(pct>=0.75){e='🎉';ti='Really strong!';s='⭐⭐⭐';m=`${score}/${tot}. Review the ones you missed.`;}else if(pct>=0.6){e='💪';ti='Good effort!';s='⭐⭐';m=`${score}/${tot}. One more round before Wednesday!`;}else{e='📚';ti='Keep going!';s='⭐';m=`${score}/${tot}. Do this one again — it\'ll click!`;}document.getElementById('end-emoji').textContent=e;document.getElementById('end-title').textContent=ti;document.getElementById('end-stars').textContent=s;document.getElementById('final-score').textContent=score;document.getElementById('final-total').textContent=tot;document.getElementById('end-msg').textContent=m;}
+function retryGame(){startGame(currentTopic);}
+</script>
+</body>
+</html>

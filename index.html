@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hattie's Revision Hub 🚀</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Nunito+Sans:wght@400;600&display=swap');
+  :root{--bg:#07090f;--card:#111827;--card2:#1a2535;--border:#1e2d45;--text:#f0f6ff;--muted:#5a7a9a;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;--radius:18px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:17px;line-height:1.6;}
+  .hero{background:linear-gradient(160deg,#05080f 0%,#0a1628 60%,#060d1a 100%);padding:30px 20px 24px;text-align:center;border-bottom:1px solid var(--border);}
+  .hero h1{font-family:'Nunito',sans-serif;font-size:2rem;font-weight:900;color:#fff;margin-bottom:6px;}
+  .hero p{font-size:0.9rem;color:var(--muted);}
+  .alert-bar{background:linear-gradient(90deg,#7f1d1d,#991b1b);padding:14px 20px;text-align:center;}
+  .alert-bar strong{color:#fca5a5;font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;display:block;}
+  .alert-bar span{font-size:0.82rem;color:#fecaca;}
+  .section{padding:20px 16px 8px;}
+  .section-label{font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+
+  /* DAY CARDS */
+  .day-card{background:var(--card);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;border:2px solid var(--border);}
+  .day-card.today{border-color:#f87171;}
+  .day-header{padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #ffffff10;}
+  .day-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+  .day-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;flex:1;}
+  .day-badge{font-size:0.7rem;font-weight:800;padding:3px 10px;border-radius:12px;}
+  .day-badge.urgent{background:#ef444420;color:#f87171;border:1px solid #ef444440;}
+  .day-badge.soon{background:#f59e0b20;color:#fbbf24;border:1px solid #f59e0b40;}
+  .day-badge.ok{background:#4ade8020;color:#4ade80;border:1px solid #4ade8040;}
+  .day-topics{padding:12px 18px 14px;display:flex;flex-direction:column;gap:8px;}
+  .day-topic{display:flex;align-items:center;gap:10px;}
+  .dt-icon{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center;}
+  .dt-info{flex:1;}
+  .dt-subject{font-size:0.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;}
+  .dt-topic{font-size:0.88rem;font-weight:600;color:#c8d8ee;}
+  .dt-go{background:#3b82f6;color:#fff;border:none;border-radius:10px;padding:8px 14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:0.8rem;cursor:pointer;text-decoration:none;display:inline-block;white-space:nowrap;}
+
+  /* SUBJECT GRID */
+  .subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px;}
+  .subject-card{display:block;text-decoration:none;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);padding:18px 14px;text-align:center;transition:all 0.2s;}
+  .subject-card:active{transform:scale(0.97);}
+  .subject-card .icon{font-size:2rem;margin-bottom:8px;display:block;}
+  .subject-card .name{font-family:'Nunito',sans-serif;font-weight:900;font-size:0.95rem;color:var(--text);}
+  .subject-card .exam{font-size:0.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-top:6px;padding:3px 10px;border-radius:12px;display:inline-block;}
+  .subject-card.hist:hover{border-color:#f59e0b;background:#f59e0b08;} .subject-card.hist .exam{background:#f59e0b20;color:#f59e0b;}
+  .subject-card.maths:hover{border-color:#4ade80;background:#4ade8008;} .subject-card.maths .exam{background:#4ade8020;color:#4ade80;}
+  .subject-card.geo:hover{border-color:#38bdf8;background:#38bdf808;} .subject-card.geo .exam{background:#38bdf820;color:#38bdf8;}
+  .subject-card.sci:hover{border-color:#00d4aa;background:#00d4aa08;} .subject-card.sci .exam{background:#00d4aa20;color:#00d4aa;}
+  .footer{padding:20px 16px 48px;text-align:center;color:var(--muted);font-size:0.8rem;line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>🚀 Hattie's Revision</h1>
+  <p>Year 8 Exams · Week of 18th May 2026</p>
+</div>
+<div class="alert-bar">
+  <strong>⚡ Crash course — exams start Monday!</strong>
+  <span>Focus on each subject the day before its exam</span>
+</div>
+
+<div class="section">
+  <div class="section-label">Your crash course plan</div>
+
+  <div class="day-card today">
+    <div class="day-header">
+      <div class="day-dot" style="background:#f87171"></div>
+      <div class="day-title">Sunday 17th — Tonight</div>
+      <span class="day-badge urgent">START NOW</span>
+    </div>
+    <div class="day-topics">
+      <div class="day-topic">
+        <span class="dt-icon">⚔️</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#f59e0b">History · Exam tomorrow</div><div class="dt-topic">Transatlantic Slave Trade</div></div>
+        <a href="history.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">⚔️</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#f59e0b">History · Exam tomorrow</div><div class="dt-topic">Abolitionists</div></div>
+        <a href="history.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">⚔️</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#f59e0b">History · Exam tomorrow</div><div class="dt-topic">Break from Rome</div></div>
+        <a href="history.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">⚔️</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#f59e0b">History · Exam tomorrow</div><div class="dt-topic">Elizabethan Golden Age</div></div>
+        <a href="history.html" class="dt-go">Go →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-dot" style="background:#f59e0b"></div>
+      <div class="day-title">Tuesday 19th — After History exam</div>
+      <span class="day-badge soon">Maths tomorrow</span>
+    </div>
+    <div class="day-topics">
+      <div class="day-topic">
+        <span class="dt-icon">➕</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#4ade80">Maths</div><div class="dt-topic">Percentages</div></div>
+        <a href="maths.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">➕</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#4ade80">Maths</div><div class="dt-topic">Laws of Indices</div></div>
+        <a href="maths.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">➕</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#4ade80">Maths</div><div class="dt-topic">Ratio</div></div>
+        <a href="maths.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">➕</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#4ade80">Maths</div><div class="dt-topic">Unit Conversion + Best Buys</div></div>
+        <a href="maths.html" class="dt-go">Go →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-dot" style="background:#38bdf8"></div>
+      <div class="day-title">Wednesday 20th — After Maths exam</div>
+      <span class="day-badge soon">Geography tomorrow</span>
+    </div>
+    <div class="day-topics">
+      <div class="day-topic">
+        <span class="dt-icon">🌍</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#38bdf8">Geography</div><div class="dt-topic">Map Skills + Grid References</div></div>
+        <a href="geography.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">🌍</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#38bdf8">Geography</div><div class="dt-topic">Amazon Rainforest</div></div>
+        <a href="geography.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">🌍</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#38bdf8">Geography</div><div class="dt-topic">Atmospheric Circulation & Biomes</div></div>
+        <a href="geography.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">🌍</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#38bdf8">Geography</div><div class="dt-topic">Tectonic Activity</div></div>
+        <a href="geography.html" class="dt-go">Go →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-header">
+      <div class="day-dot" style="background:#00d4aa"></div>
+      <div class="day-title">Thursday 21st — After Geography exam</div>
+      <span class="day-badge ok">Science tomorrow</span>
+    </div>
+    <div class="day-topics">
+      <div class="day-topic">
+        <span class="dt-icon">🔬</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#00d4aa">Science</div><div class="dt-topic">Chemical Reactions</div></div>
+        <a href="science.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">🔬</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#00d4aa">Science</div><div class="dt-topic">Electricity & Magnetism</div></div>
+        <a href="science.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">🔬</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#00d4aa">Science</div><div class="dt-topic">Acids & Bases</div></div>
+        <a href="science.html" class="dt-go">Go →</a>
+      </div>
+      <div class="day-topic">
+        <span class="dt-icon">🔬</span>
+        <div class="dt-info"><div class="dt-subject" style="color:#00d4aa">Science</div><div class="dt-topic">Breathing & Respiration + Light</div></div>
+        <a href="science.html" class="dt-go">Go →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="padding-bottom:16px;">
+  <div class="section-label">Jump to a subject</div>
+</div>
+<div class="subject-grid">
+  <a href="history.html" class="subject-card hist"><span class="icon">⚔️</span><div class="name">History</div><div class="exam">Tue 19th</div></a>
+  <a href="maths.html" class="subject-card maths"><span class="icon">➕</span><div class="name">Maths</div><div class="exam">Wed 20th</div></a>
+  <a href="geography.html" class="subject-card geo"><span class="icon">🌍</span><div class="name">Geography</div><div class="exam">Thu 21st</div></a>
+  <a href="science.html" class="subject-card sci"><span class="icon">🔬</span><div class="name">Science</div><div class="exam">Fri 22nd</div></a>
+</div>
+
+<div class="footer">
+  <p>Each game generates fresh questions every time.<br>Endless mode — do as many as you have time for. Good luck Hattie! 💪</p>
+</div>
+</body>
+</html>
