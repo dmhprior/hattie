@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hattie's Science Revision 🔬</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Nunito+Sans:wght@400;600&display=swap');
+  :root{--bg:#0f1923;--card:#1a2535;--card2:#1f2e42;--accent:#00d4aa;--accent2:#ff6b6b;--accent3:#ffd93d;--text:#e8f4f8;--muted:#7a9bb5;--radius:18px;--green:#4ade80;--red:#f87171;--yellow:#fbbf24;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:18px;line-height:1.6;}
+  .header{background:linear-gradient(135deg,#0d2137 0%,#1a3a5c 100%);padding:20px 20px 16px;text-align:center;border-bottom:3px solid var(--accent);position:sticky;top:0;z-index:10;}
+  .header h1{font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:900;color:var(--accent);}
+  .header p{font-size:0.85rem;color:var(--muted);margin-top:2px;}
+  #topic-screen{padding:20px 16px 40px;}
+  .section-label{font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;padding-left:4px;}
+  .topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  .topic-btn{background:var(--card);border:2px solid transparent;border-radius:var(--radius);padding:18px 14px;cursor:pointer;text-align:center;transition:all 0.2s;}
+  .topic-btn:active{transform:scale(0.97);}
+  .topic-btn .icon{font-size:2rem;margin-bottom:8px;display:block;}
+  .topic-btn .name{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:var(--text);line-height:1.3;}
+  .topic-btn .sub{font-size:0.72rem;color:var(--muted);margin-top:4px;}
+  .topic-btn[data-color="teal"]{border-color:#00d4aa33;} .topic-btn[data-color="teal"]:hover{border-color:var(--accent);background:#00d4aa18;}
+  .topic-btn[data-color="pink"]{border-color:#ff6b6b33;} .topic-btn[data-color="pink"]:hover{border-color:var(--accent2);background:#ff6b6b18;}
+  .topic-btn[data-color="yellow"]{border-color:#ffd93d33;} .topic-btn[data-color="yellow"]:hover{border-color:var(--accent3);background:#ffd93d18;}
+  .topic-btn[data-color="purple"]{border-color:#a78bfa33;} .topic-btn[data-color="purple"]:hover{border-color:#a78bfa;background:#a78bfa18;}
+  .topic-btn[data-color="blue"]{border-color:#60a5fa33;} .topic-btn[data-color="blue"]:hover{border-color:#60a5fa;background:#60a5fa18;}
+  .topic-btn[data-color="orange"]{border-color:#fb923c33;} .topic-btn[data-color="orange"]:hover{border-color:#fb923c;background:#fb923c18;}
+  .topic-btn[data-color="green"]{border-color:#4ade8033;} .topic-btn[data-color="green"]:hover{border-color:var(--green);background:#4ade8018;}
+  #game-screen{display:none;}
+  .game-header{background:var(--card);padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #ffffff10;}
+  .back-btn{background:none;border:2px solid var(--muted);border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .game-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;flex:1;}
+  .score-badge{background:var(--accent);color:#0f1923;font-family:'Nunito',sans-serif;font-weight:900;font-size:0.85rem;padding:4px 12px;border-radius:20px;flex-shrink:0;}
+  .streak-bar{background:var(--card);padding:8px 20px;border-bottom:1px solid #ffffff08;display:flex;align-items:center;gap:10px;}
+  .streak-label{font-size:0.75rem;color:var(--muted);font-weight:700;flex-shrink:0;}
+  .streak-dots{display:flex;gap:5px;flex:1;}
+  .streak-dot{width:14px;height:14px;border-radius:50%;background:#ffffff15;transition:all 0.3s;flex-shrink:0;}
+  .streak-dot.hit{background:var(--green);} .streak-dot.miss{background:var(--red);}
+  .finish-btn-small{background:none;border:1.5px solid var(--muted);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:800;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;}
+  .finish-btn-small:hover{border-color:var(--accent);color:var(--accent);}
+  .q-area{padding:20px 20px 0;}
+  .q-number{font-size:0.75rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .q-box{background:var(--card);border-radius:var(--radius);padding:22px 20px;margin-bottom:20px;min-height:90px;display:flex;align-items:center;border:2px solid #ffffff08;}
+  .q-text{font-family:'Nunito',sans-serif;font-weight:700;font-size:1.1rem;line-height:1.5;color:var(--text);}
+  .loading-dots{display:flex;gap:6px;align-items:center;}
+  .loading-dots span{width:10px;height:10px;background:var(--accent);border-radius:50%;animation:bounce 1.2s infinite;}
+  .loading-dots span:nth-child(2){animation-delay:0.2s;background:var(--accent3);}
+  .loading-dots span:nth-child(3){animation-delay:0.4s;background:var(--accent2);}
+  @keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.4;}40%{transform:translateY(-10px);opacity:1;}}
+  .options-grid{display:flex;flex-direction:column;gap:10px;padding:0 20px 20px;}
+  .option-btn{background:var(--card2);border:2.5px solid #ffffff12;border-radius:var(--radius);padding:16px 18px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;color:var(--text);transition:all 0.15s;display:flex;align-items:center;gap:14px;line-height:1.4;}
+  .option-btn:hover:not(:disabled){border-color:var(--accent);background:#00d4aa12;}
+  .option-btn .opt-letter{width:32px;height:32px;border-radius:50%;background:#ffffff12;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;font-weight:900;}
+  .option-btn.correct{border-color:var(--green);background:#4ade8018;} .option-btn.correct .opt-letter{background:var(--green);color:#0f1923;}
+  .option-btn.wrong{border-color:var(--red);background:#f8717118;} .option-btn.wrong .opt-letter{background:var(--red);color:#0f1923;}
+  .option-btn:disabled{cursor:default;}
+  .feedback-box{margin:0 20px 20px;padding:16px 18px;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:700;font-size:0.95rem;line-height:1.5;display:none;}
+  .feedback-box.correct{background:#4ade8018;border:2px solid var(--green);color:#a7f3d0;}
+  .feedback-box.wrong{background:#f8717118;border:2px solid var(--red);color:#fca5a5;}
+  .feedback-emoji{font-size:1.4rem;margin-bottom:6px;display:block;}
+  .feedback-explain{color:var(--text);margin-top:8px;font-weight:600;font-size:0.9rem;}
+  .next-btn{display:none;margin:0 20px 30px;width:calc(100% - 40px);padding:18px;background:var(--accent);color:#0f1923;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;}
+  #end-screen{display:none;padding:40px 20px;text-align:center;}
+  .end-emoji{font-size:4rem;margin-bottom:16px;}
+  .end-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:var(--accent);margin-bottom:8px;}
+  .end-score{font-family:'Nunito',sans-serif;font-weight:800;font-size:3rem;margin:20px 0;color:var(--text);}
+  .end-score span{color:var(--muted);font-size:1.5rem;}
+  .end-msg{color:var(--muted);font-size:0.95rem;margin-bottom:30px;line-height:1.6;}
+  .retry-btn{display:block;width:100%;padding:18px;background:var(--accent);color:#0f1923;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:900;font-size:1.1rem;cursor:pointer;margin-bottom:12px;}
+  .menu-btn{display:block;width:100%;padding:18px;background:var(--card);color:var(--text);border:2px solid #ffffff20;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;}
+  .stars{color:var(--accent3);font-size:1.5rem;}
+  .error-box{margin:0 20px 20px;padding:16px;background:#ff6b6b18;border:2px solid var(--accent2);border-radius:var(--radius);color:#fca5a5;font-size:0.9rem;display:none;}
+</style>
+</head>
+<body>
+<div class="header"><h1>🔬 Science Revision</h1><p>Hattie's Year 8 · Exam Friday 22nd May</p></div>
+<div id="topic-screen">
+  <div style="padding:20px 16px 10px;">
+    <div class="section-label">Choose a topic</div>
+    <div class="topic-grid">
+      <button class="topic-btn" data-color="orange" onclick="startGame('reactions')"><span class="icon">🔥</span><div class="name">Chemical Reactions</div><div class="sub">Reactions 1 & 2, types, word equations</div></button>
+      <button class="topic-btn" data-color="teal" onclick="startGame('breathing')"><span class="icon">🫁</span><div class="name">Breathing & Respiration</div><div class="sub">Aerobic, anaerobic, gas exchange</div></button>
+      <button class="topic-btn" data-color="purple" onclick="startGame('pureimpure')"><span class="icon">🧪</span><div class="name">Pure & Impure Substances</div><div class="sub">Mixtures, separation, chromatography</div></button>
+      <button class="topic-btn" data-color="yellow" onclick="startGame('electricity')"><span class="icon">⚡</span><div class="name">Electricity & Magnetism</div><div class="sub">Circuits, current, voltage, magnets</div></button>
+      <button class="topic-btn" data-color="blue" onclick="startGame('light')"><span class="icon">🌈</span><div class="name">Light</div><div class="sub">Reflection, refraction, lenses, colour</div></button>
+      <button class="topic-btn" data-color="pink" onclick="startGame('acids')"><span class="icon">⚗️</span><div class="name">Acids & Bases</div><div class="sub">pH, neutralisation, salts, indicators</div></button>
+      <button class="topic-btn" data-color="green" onclick="startGame('pressure')"><span class="icon">🌊</span><div class="name">Pressure & Upthrust</div><div class="sub">Pressure, floating, sinking, Archimedes</div></button>
+      <button class="topic-btn" data-color="teal" onclick="startGame('coreskills')"><span class="icon">📊</span><div class="name">Core Skills</div><div class="sub">Graphs, tables, variables, units</div></button>
+    </div>
+    <div style="padding:14px 16px;background:var(--card);border-radius:14px;font-size:0.82rem;color:var(--muted);line-height:1.6;">⚡ <strong style="color:#f87171">Exam is Friday!</strong> Do the topics you're least confident on first.</div>
+  </div>
+</div>
+<div id="game-screen">
+  <div class="game-header"><button class="back-btn" onclick="goHome()">←</button><div class="game-title" id="game-title">Topic</div><div class="score-badge" id="score-badge">0 / 0</div></div>
+  <div class="streak-bar"><div class="streak-label">Last 10:</div><div class="streak-dots" id="streak-dots"></div><button class="finish-btn-small" onclick="showEnd()">Finish ✓</button></div>
+  <div class="q-area"><div class="q-number" id="q-number">Question 1</div><div class="q-box" id="q-box"><div class="loading-dots"><span></span><span></span><span></span></div></div></div>
+  <div class="options-grid" id="options-grid"></div>
+  <div class="feedback-box" id="feedback-box"></div>
+  <div class="error-box" id="error-box">Couldn't load — tap Next to try again.</div>
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next question →</button>
+</div>
+<div id="end-screen">
+  <div class="end-emoji" id="end-emoji">🎉</div><div class="end-title" id="end-title">Session done!</div><div class="stars" id="end-stars">⭐⭐⭐</div>
+  <div class="end-score"><span id="final-score">0</span><span>/ <span id="final-total">0</span></span></div><div class="end-msg" id="end-msg"></div>
+  <button class="retry-btn" onclick="retryGame()">Same topic again 🔄</button><button class="menu-btn" onclick="goHome()">← Choose another topic</button>
+</div>
+<script>
+const PROXY='https://bert-api-proxy.super-night-6aa0.workers.dev';
+const TOPICS={
+  reactions:{name:"Chemical Reactions",context:`Year 8 Science - Chemical Reactions 1 and 2:
+CHEMICAL REACTIONS: Reactants → Products. New substances formed. Usually irreversible. Evidence: colour change, gas produced (bubbles), temperature change, precipitate (solid forms), light produced.
+TYPES OF REACTION: Combustion (burning with oxygen, produces CO2 and H2O), Thermal decomposition (one substance breaks down on heating, e.g. CaCO3 → CaO + CO2), Oxidation (gains oxygen), Reduction (loses oxygen), Displacement (more reactive metal pushes out less reactive metal, e.g. zinc + copper sulfate → zinc sulfate + copper).
+REACTIVITY SERIES: Potassium, Sodium, Calcium, Magnesium, Aluminium, Zinc, Iron, Nickel, Tin, Lead, Hydrogen, Copper, Silver, Gold, Platinum. (Potassium most reactive, platinum least). More reactive metals displace less reactive metals from solutions.
+WORD EQUATIONS: E.g. magnesium + oxygen → magnesium oxide. Zinc + hydrochloric acid → zinc chloride + hydrogen. Iron + sulfur → iron sulfide.
+SYMBOL EQUATIONS: Must be balanced (same number of each atom each side). E.g. 2H2 + O2 → 2H2O.
+EXOTHERMIC reactions: Release energy/heat (combustion, neutralisation, respiration). Temperature rises. Hand warmers, self-heating cans.
+ENDOTHERMIC reactions: Absorb energy/heat (thermal decomposition, photosynthesis). Temperature falls. Sports injury cold packs.
+CONSERVATION OF MASS: Total mass of reactants = total mass of products (atoms rearranged, not created or destroyed).`},
+  breathing:{name:"Breathing & Respiration",context:`Year 8 Science - Breathing and Respiration:
+RESPIRATION vs BREATHING: Breathing = moving air in/out of lungs (physical process). Respiration = chemical process in cells releasing energy from glucose.
+AEROBIC RESPIRATION: Uses oxygen. Glucose + Oxygen → Carbon dioxide + Water (+ energy). Word equation: C6H12O6 + 6O2 → 6CO2 + 6H2O. Occurs in mitochondria. Used for most activities.
+ANAEROBIC RESPIRATION: Without oxygen. In animals: Glucose → Lactic acid (+ energy). Causes muscle fatigue/cramp. In yeast: Glucose → Ethanol + Carbon dioxide (fermentation — used to make bread rise, alcohol).
+BREATHING MECHANISM: Inhale — diaphragm contracts (flattens), intercostal muscles contract, ribcage moves up and out, volume increases, pressure decreases, air rushes in. Exhale — diaphragm relaxes, ribcage moves down and in, volume decreases, pressure increases, air pushed out.
+GAS EXCHANGE: Occurs in alveoli (air sacs in lungs). Alveoli adaptations: very thin walls (1 cell thick), large surface area, moist surface, surrounded by capillaries, good blood supply. Oxygen diffuses from alveoli into blood. CO2 diffuses from blood into alveoli.
+INHALED vs EXHALED AIR: Inhaled = 21% O2, 0.04% CO2, 78% N2. Exhaled = 16% O2, 4% CO2, 78% N2, more water vapour and warmer.
+OXYGEN DEBT: After anaerobic exercise, body needs extra oxygen to break down lactic acid. Explains why we keep breathing fast after exercise stops.`},
+  pureimpure:{name:"Pure & Impure Substances",context:`Year 8 Science - Pure and Impure Substances:
+PURE SUBSTANCES: Contain only one type of element or compound. Have sharp, fixed melting and boiling points. E.g. pure water boils at exactly 100°C.
+IMPURE SUBSTANCES (MIXTURES): Two or more substances not chemically bonded. Melting/boiling point ranges (not exact). E.g. sea water boils above 100°C.
+TESTING PURITY: Pure substances have sharp melting points. Impure substances melt over a range of temperatures.
+SEPARATING MIXTURES:
+- Filtration: separates insoluble solid from liquid (residue stays on filter paper, filtrate passes through).
+- Evaporation/crystallisation: separates soluble solid from liquid by heating.
+- Distillation: separates liquids with different boiling points. Simple distillation for one liquid from solution. Fractional distillation for mixtures of liquids (e.g. crude oil, air).
+- Chromatography: separates mixtures of dissolved substances (inks, dyes). Mobile phase (solvent) carries substances up paper/plate. Different substances travel different distances (Rf value). Rf = distance travelled by substance ÷ distance travelled by solvent. Used in forensics, food testing.
+- Centrifugation: spinning to separate substances of different densities.
+FORMULATIONS: Deliberately made mixtures with specific ratios. Examples: medicines (tablets), fuels, alloys, cosmetics, fertilisers, paints.
+PAPER CHROMATOGRAPHY METHOD: Draw pencil baseline, add spots of mixture, dip in solvent (below baseline), allow to run, remove before solvent reaches top, mark solvent front, calculate Rf values.`},
+  electricity:{name:"Electricity & Magnetism",context:`Year 8 Science - Electricity and Magnetism:
+ELECTRIC CIRCUITS: Series circuit — components in one loop, same current throughout, voltage shared. Parallel circuit — components in separate branches, voltage same across each branch, current splits.
+CURRENT: Flow of charge (electrons). Measured in Amperes (A) with ammeter. In series: current same everywhere. In parallel: current splits at junctions.
+VOLTAGE/POTENTIAL DIFFERENCE: Energy transferred per unit charge. Measured in Volts (V) with voltmeter. In series: voltages add up to battery voltage. In parallel: voltage same across each branch.
+RESISTANCE: Opposition to current flow. Measured in Ohms (Ω). Ohm's Law: V = I × R (voltage = current × resistance). Adding resistors in series increases total resistance. Adding in parallel decreases total resistance.
+COMPONENTS: Cell (provides voltage), battery (multiple cells), bulb, switch, resistor, variable resistor (rheostat), ammeter (in series), voltmeter (in parallel), LED, diode (one way only).
+STATIC ELECTRICITY: Caused by friction transferring electrons. Like charges repel, unlike charges attract.
+MAGNETS: North and south poles. Like poles repel, unlike poles attract. Magnetic fields shown by field lines from N to S.
+ELECTROMAGNETS: Current through coil of wire creates magnetic field. Stronger with more turns, higher current, iron core. Used in: motors, generators, loudspeakers, MRI scanners, maglev trains, electric bells.
+INDUCED MAGNETISM: Iron becomes temporarily magnetised when placed in magnetic field. Steel becomes permanently magnetised.`},
+  light:{name:"Light",context:`Year 8 Science - Light:
+REFLECTION: Light bounces off surfaces. Law of reflection: angle of incidence = angle of reflection (both measured from normal). Regular reflection (smooth surfaces, e.g. mirrors) vs diffuse reflection (rough surfaces).
+REFRACTION: Light bends when it passes from one medium to another at an angle. Light slows down entering denser medium (glass/water) and bends toward normal. Speeds up leaving denser medium and bends away from normal. Causes: apparent depth in water, lenses, rainbows, mirages.
+TOTAL INTERNAL REFLECTION: When light hits boundary at angle greater than critical angle, all light reflected inside. Used in optical fibres (communications, endoscopes).
+LENSES: Convex (converging) lens — bends light inward, focuses light, used in cameras, magnifying glasses, eye (long-sighted correction). Concave (diverging) lens — bends light outward, makes objects appear smaller, used for short-sighted correction.
+COLOUR: White light is a mixture of all colours (spectrum: ROYGBIV). Prism splits white light by refraction (different wavelengths refract by different amounts). Filters: only transmit their own colour, absorb others. Coloured objects: reflect their colour, absorb others. Red object in green light appears black (no red light to reflect).
+THE EYE: Cornea + lens focus light onto retina. Iris controls pupil size (amount of light). Rods (black/white, low light), cones (colour, bright light). Optic nerve to brain. Long-sight (can't see near) — convex lens. Short-sight (can't see far) — concave lens.
+LIGHT WAVES: Transverse waves. Travel at 3×10⁸ m/s in vacuum. Part of electromagnetic spectrum.`},
+  acids:{name:"Acids & Bases",context:`Year 8 Science - Acids and Bases:
+pH SCALE: 0-14. Below 7 = acid. 7 = neutral. Above 7 = alkali/base. Strong acid: pH 1-2. Weak acid: pH 3-6. Strong alkali: pH 13-14. Weak alkali: pH 8-10.
+INDICATORS: Universal indicator shows full range of colours. Litmus: red in acid, blue in alkali. Phenolphthalein: colourless in acid, pink in alkali.
+COMMON ACIDS: Hydrochloric acid (HCl), sulfuric acid (H2SO4), nitric acid (HNO3), ethanoic acid (vinegar), citric acid (lemons).
+COMMON ALKALIS: Sodium hydroxide (NaOH), calcium hydroxide (lime water), ammonia, sodium carbonate (washing soda).
+NEUTRALISATION: Acid + Base → Salt + Water. E.g. HCl + NaOH → NaCl + H2O. Used in: indigestion tablets (neutralise excess stomach acid), treating wasp stings (acid) with alkali, treating bee stings (alkali) with acid, treating acidic soil with lime.
+SALT NAMES: Hydrochloric acid makes chloride salts. Sulfuric acid makes sulfate salts. Nitric acid makes nitrate salts. E.g. sodium + hydrochloric acid → sodium chloride + hydrogen.
+REACTIONS OF ACIDS: Acid + metal → salt + hydrogen (test hydrogen: squeaky pop with lit splint). Acid + metal oxide → salt + water. Acid + metal carbonate → salt + water + carbon dioxide (test CO2: turns lime water milky).
+CONCENTRATION vs STRENGTH: Strength = degree of ionisation (strong/weak). Concentration = amount dissolved (dilute/concentrated). Strong acid doesn't mean concentrated.`},
+  pressure:{name:"Pressure & Upthrust",context:`Year 8 Science - Pressure and Upthrust:
+PRESSURE: Force per unit area. Pressure (Pa or N/m²) = Force (N) ÷ Area (m²). Higher pressure when same force applied over smaller area. Examples: sharp knife (small area = high pressure), snowshoes (large area = low pressure), stiletto heels vs flat shoes.
+PRESSURE IN FLUIDS: Pressure acts in all directions. Increases with depth. Greater density = greater pressure at same depth. Pressure = density × g × depth (ρgh).
+ATMOSPHERIC PRESSURE: Caused by weight of air above. Decreases with altitude (less air above). Standard atmospheric pressure ≈ 101,000 Pa (101 kPa). Used in: barometers, altimeters, weather forecasting.
+UPTHRUST (BUOYANCY): Upward force exerted by fluid on submerged/floating object. Caused by pressure being greater at bottom than top. ARCHIMEDES' PRINCIPLE: Upthrust = weight of fluid displaced. Object floats when upthrust = weight. Object sinks when weight > upthrust.
+FLOATING AND SINKING: Object floats if its density < fluid density. Object sinks if density > fluid density. Steel ship floats because it displaces water equal to its weight (hull is mostly air so average density is low). Submarines use ballast tanks (fill with water to sink, expel water with compressed air to rise).
+HYDRAULICS: Liquids cannot be compressed. Pressure transmitted equally throughout liquid. Used in: car brakes, hydraulic lifts, diggers. Small force on small piston creates large force on large piston (P = F/A, so F = PA).`},
+  coreskills:{name:"Core Science Skills",context:`Year 8 Science - Core Skills (graphs, tables, variables):
+VARIABLES: Independent variable (what you change), Dependent variable (what you measure), Control variables (what you keep the same to make it a fair test).
+TYPES OF DATA: Categoric (named groups, e.g. colours, materials), Continuous (any value on a scale, e.g. temperature, time, mass), Discrete (whole numbers only, e.g. number of leaves).
+GRAPHS: Line graph — for continuous data, shows trends, draw line of best fit. Bar chart — for categoric data. Pie chart — shows proportions. Scatter graph — shows correlation (positive, negative, or none).
+DRAWING GRAPHS: Title, labelled axes with units, suitable scale, plot points accurately, line of best fit (not dot-to-dot), origin only if appropriate.
+TABLES: Clear headings with units in brackets, independent variable in left column, repeat readings, calculate mean (add values, divide by number of values), identify anomalous results.
+ACCURACY vs PRECISION: Accurate = close to true value. Precise = repeated measurements close to each other (but may not be accurate). Random errors affect precision. Systematic errors affect accuracy.
+UNITS: Length — mm, cm, m, km. Mass — g, kg. Time — s, min, h. Temperature — °C, K. Volume — cm³, ml, l. Force — N. Pressure — Pa, N/m². Current — A. Voltage — V. Frequency — Hz.
+SIGNIFICANT FIGURES: 1234 = 4 sig figs. 0.00567 = 3 sig figs. 5600 = ambiguous. Round appropriately for experiment precision.
+WRITING CONCLUSIONS: State the pattern/trend, refer to data with numbers, link to scientific knowledge/theory.`}
+};
+let currentTopic=null,questions=[],currentQ=0,score=0,answered=false,recentResults=[];
+function goHome(){document.getElementById('topic-screen').style.display='block';document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='none';}
+async function startGame(k){currentTopic=k;questions=[];currentQ=0;score=0;answered=false;recentResults=[];document.getElementById('topic-screen').style.display='none';document.getElementById('end-screen').style.display='none';document.getElementById('game-screen').style.display='block';document.getElementById('game-title').textContent=TOPICS[k].name;updateScoreBadge();updateStreakDots();updateQNumber();await loadQuestion();}
+function updateScoreBadge(){document.getElementById('score-badge').textContent=`${score} / ${currentQ}`;}
+function updateQNumber(){document.getElementById('q-number').textContent=`Question ${currentQ+1}`;}
+function updateStreakDots(){const c=document.getElementById('streak-dots');c.innerHTML='';const s=recentResults.slice(-10);for(let i=0;i<10;i++){const d=document.createElement('div');d.className='streak-dot';if(i<s.length){if(s[i])d.classList.add('hit');else d.classList.add('miss');}c.appendChild(d);}}
+async function loadQuestion(){
+  answered=false;['feedback-box','error-box'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('next-btn').style.display='none';document.getElementById('options-grid').innerHTML='';document.getElementById('q-box').innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+  const t=TOPICS[currentTopic];const prev=questions.slice(-20).map(q=>q.question).join(' | ');
+  const prompt=`You are a quiz master helping 13-year-old Hattie revise Year 8 Science for an exam in 3 days. Keep questions clear and exam-focused.\n\nTopic content:\n${t.context}\n\n${prev?`Do NOT repeat: ${prev}`:''}\n\nGenerate ONE multiple choice question. Rules:\n- 1-2 sentences max 20 words\n- 4 answer options max 8 words each\n- 1 correct answer, wrong answers are plausible\n- 1-sentence explanation max 20 words\n\nJSON only: {"question":"...","options":["...","...","...","..."],"correct":0,"explanation":"..."}`;
+  try{const r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});if(!r.ok)throw 0;const d=await r.json();const q=JSON.parse(d.content[0].text.trim().replace(/```json|```/g,''));questions.push(q);renderQuestion(q);}
+  catch(e){document.getElementById('q-box').innerHTML='<span class="q-text">Couldn\'t load — tap Next.</span>';document.getElementById('error-box').style.display='block';document.getElementById('next-btn').style.display='block';}
+}
+function renderQuestion(q){document.getElementById('q-box').innerHTML=`<span class="q-text">${q.question}</span>`;const g=document.getElementById('options-grid');g.innerHTML='';['A','B','C','D'].forEach((l,i)=>{const b=document.createElement('button');b.className='option-btn';b.innerHTML=`<span class="opt-letter">${l}</span><span>${q.options[i]}</span>`;b.onclick=()=>answer(i,q);g.appendChild(b);});}
+function answer(chosen,q){if(answered)return;answered=true;const btns=document.getElementById('options-grid').querySelectorAll('.option-btn');const c=q.correct;const ok=chosen===c;if(ok)score++;recentResults.push(ok);btns.forEach((b,i)=>{b.disabled=true;if(i===c)b.classList.add('correct');else if(i===chosen&&!ok)b.classList.add('wrong');});const fb=document.getElementById('feedback-box');fb.className='feedback-box '+(ok?'correct':'wrong');fb.style.display='block';fb.innerHTML=ok?`<span class="feedback-emoji">🎉</span><strong>Correct!</strong><div class="feedback-explain">${q.explanation}</div>`:`<span class="feedback-emoji">😬</span><strong>Not quite — answer was ${'ABCD'[c]}: ${q.options[c]}</strong><div class="feedback-explain">${q.explanation}</div>`;updateScoreBadge();updateStreakDots();document.getElementById('next-btn').style.display='block';}
+async function nextQuestion(){currentQ++;updateQNumber();await loadQuestion();}
+function showEnd(){document.getElementById('game-screen').style.display='none';document.getElementById('end-screen').style.display='block';const tot=currentQ;const pct=tot>0?score/tot:0;let e,ti,m,s;if(pct>=0.9){e='🏆';ti='Brilliant!';s='⭐⭐⭐';m=`${score}/${tot} — Science sorted!`;}else if(pct>=0.75){e='🎉';ti='Really strong!';s='⭐⭐⭐';m=`${score}/${tot}. Review the ones you missed.`;}else if(pct>=0.6){e='💪';ti='Good effort!';s='⭐⭐';m=`${score}/${tot}. Another round before Friday!`;}else{e='📚';ti='Keep going!';s='⭐';m=`${score}/${tot}. Do this one again — it\'ll click!`;}document.getElementById('end-emoji').textContent=e;document.getElementById('end-title').textContent=ti;document.getElementById('end-stars').textContent=s;document.getElementById('final-score').textContent=score;document.getElementById('final-total').textContent=tot;document.getElementById('end-msg').textContent=m;}
+function retryGame(){startGame(currentTopic);}
+</script>
+</body>
+</html>
